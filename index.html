@@ -62,7 +62,7 @@
     outline: none;
     box-shadow: inset 6px 6px 10px #c8d0e7, inset -6px -6px 10px #ffffff;
   }
-  .undo-redo, .actions {
+  .undo-redo-reset, .actions {
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
@@ -130,6 +130,19 @@
   max-width: 60%;
   min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
 }
+
+.input-group input#shortcutFilter {
+  flex: 0 1 20%;
+  max-width: 20%;
+  min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
+}
+
+.input-group input#valueFilter {
+  flex: 0 1 60%;
+  max-width: 60%;
+  min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
+}
+
 
 
 
@@ -250,17 +263,20 @@
   <h2>📂 Upload and Edit Your <code>documents.txt</code> File</h2>
   <input type="file" id="fileInput" accept=".txt" />
   <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
-  <div class="undo-redo">
+  <div class="undo-redo-reset">
     <button class="btn" id="undoBtn">↩ Undo</button>
     <button class="btn" id="redoBtn">↪ Redo</button>
+        <button class="btn" onclick="resetText()">🧹 Reset</button>
+    <button class="btn" onclick="refreshPage()">🔄 Refresh</button>
+
+
   </div>
   <div class="actions">
     <button class="btn" onclick="sortLines()">🔤 Sort </button>
-    <button class="btn" onclick="downloadFile()">⬇ Download </button>
-    <button class="btn" onclick="removeEmptyLines()">🧽 Remove </button>
-    <button class="btn" onclick="resetText()">🧹 Reset</button>
-    <button class="btn" onclick="refreshPage()">🔄 Refresh</button>
-    <button class="btn" onclick="removeDuplicates()">🗃️ Remove Duplicates</button>
+  
+    <button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
+    <button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
+      <button class="btn" onclick="downloadFile()">⬇ Download </button>
   </div>
   <div class="input-group">
     <input type="text" id="shortcutInput" placeholder="Shortcut" list="shortcutSuggestions" />
