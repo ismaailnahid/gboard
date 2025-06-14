@@ -17,14 +17,22 @@
     align-items: flex-start;
   }
   .container {
-    width: 100%; max-width: 960px;
+    width: 100%;
+    max-width: 960px;
     background: #ffffff;
     border-radius: 16px;
     padding: 30px 28px;
     box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.3), -8px -8px 16px #ffffff;
-    display: flex; flex-direction: column; gap: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
   }
-  h2 { margin: 0 0 15px 0; font-weight: 700; color: #111; text-align: center; }
+  h2 {
+    margin: 0 0 15px 0;
+    font-weight: 700;
+    color: #111;
+    text-align: center;
+  }
   #fileInput, #textArea, .btn, .input-group input[type="text"] {
     background: #f0f3f7;
     border: none;
@@ -33,13 +41,17 @@
     transition: box-shadow 0.3s ease;
   }
   #fileInput {
-    padding: 12px 16px; font-size: 16px; cursor: pointer;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
   }
   #fileInput:hover {
     box-shadow: inset 4px 4px 8px #c2cae1, inset -4px -4px 8px #f5f8ff;
   }
   #textArea {
-    width: 100%; min-height: 180px;
+    width: 100%;
+    min-height: 180px;
     font-family: monospace;
     font-size: 15px;
     padding: 16px 20px;
@@ -51,31 +63,64 @@
     box-shadow: inset 6px 6px 10px #c8d0e7, inset -6px -6px 10px #ffffff;
   }
   .undo-redo, .actions {
-    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
   .btn {
-    padding: 12px 22px; font-size: 14px; font-weight: 600;
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 600;
     background: linear-gradient(145deg, #e1e7f0, #f9fbff);
     color: #333;
-    cursor: pointer; user-select: none;
-    min-width: 120px; width: auto;
+    cursor: pointer;
+    user-select: none;
+    min-width: 120px;
+    width: auto;
     box-shadow: 6px 6px 10px rgba(163, 177, 198, 0.25), -6px -6px 10px #ffffff;
+    border: none;
+    border-radius: 14px;
+    transition: box-shadow 0.3s ease;
   }
   .btn:hover {
     box-shadow: inset 4px 4px 8px #cfd8ef, inset -4px -4px 8px #f6faff;
   }
   .input-group {
-    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center;
-  }
-  .input-group input[type="text"] {
-    flex: 1 1 200px; padding: 12px 16px; font-family: monospace; font-size: 15px;
-  }
-  .input-group button.btn {
-    padding: 10px 16px; height: 42px; align-self: center;
-  }
+  display: flex;
+  gap: 12px;
+  justify-content: center; /* ইনপুটগুলো মাঝখানে থাকবে */
+  flex-wrap: wrap; /* ছোট স্ক্রিনে নিচে নেমে যাবে */
+}
+
+.input-group input[type="text"] {
+  flex: 0 1 30%;  /* grow=0, shrink=1, base width=30% */
+  max-width: 300px; /* ইনপুট ফিল্ড সর্বোচ্চ 300px পর্যন্ত বড় হবে */
+  min-width: 150px; /* মিনিমাম 150px */
+  padding: 10px 14px;
+  font-size: 15px;
+  border-radius: 14px;
+  border: none;
+  background: #f0f3f7;
+  box-shadow: inset 6px 6px 10px #d1d9e6, inset -6px -6px 10px #ffffff;
+  transition: box-shadow 0.3s ease;
+}
+
+.input-group input[type="text"]:focus {
+  box-shadow: inset 4px 4px 8px #c2cae1, inset -4px -4px 8px #f5f8ff;
+  outline: none;
+}
+
+.input-group button.btn {
+  flex: 0 1 auto; /* বাটনের প্রস্থ নিজস্ব থাকবে */
+  padding: 10px 20px;
+  min-width: 120px;
+  border-radius: 14px;
+}  
   #preview {
     min-height: 180px;
-    font-family: monospace; font-size: 15px;
+    font-family: monospace;
+    font-size: 15px;
     padding: 20px 24px;
     border-radius: 16px;
     background: #f0f3f7;
@@ -92,6 +137,79 @@
     padding: 0 6px;
     color: #bfa31d;
   }
+  
+  /* ===== Responsive Part ===== */
+  @media (max-width: 720px) {
+    body {
+      padding: 15px 10px;
+      align-items: center;
+    }
+    .container {
+      padding: 20px 16px;
+      max-width: 100%;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.25), -6px -6px 12px #ffffff;
+    }
+    #fileInput {
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+    #textArea {
+      font-size: 14px;
+      padding: 14px 16px;
+      min-height: 140px;
+    }
+    .btn {
+      font-size: 13px;
+      padding: 10px 18px;
+      min-width: 100px;
+      flex: 1 1 auto;
+      box-shadow: 5px 5px 10px rgba(163, 177, 198, 0.2), -5px -5px 10px #ffffff;
+    }
+    .undo-redo, .actions {
+      gap: 12px;
+      justify-content: space-evenly;
+    }
+    .input-group {
+      flex-direction: column;
+      gap: 10px;
+      align-items: stretch;
+    }
+    .input-group input[type="text"] {
+      flex: unset;
+      width: 100%;
+      min-width: 0;
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+    .input-group button.btn {
+      width: 100%;
+      height: 40px;
+      padding: 10px 14px;
+      font-size: 14px;
+      align-self: stretch;
+    }
+    #preview {
+      font-size: 14px;
+      padding: 16px 18px;
+      max-height: 240px;
+      min-height: 140px;
+    }
+  }
+
+  /* মোবাইল স্ক্রিনে একটু ছোট করে দিবে */
+@media (max-width: 480px) {
+  .input-group input[type="text"] {
+    flex: 0 1 80%; /* 80% width নেবে মোবাইলে */
+    max-width: none;
+    min-width: 100px;
+  }
+  .input-group button.btn {
+    flex: 0 1 80%;
+    min-width: unset;
+  }
+}
 </style>
 </head>
 <body>
@@ -126,7 +244,9 @@
   <datalist id="shortcutSuggestions"></datalist>
   <datalist id="valueSuggestions"></datalist>
 </div>
+
 <script>
+// Your existing JS code here (unchanged, same as you provided)
 const fileInput = document.getElementById('fileInput');
 const textArea = document.getElementById('textArea');
 const preview = document.getElementById('preview');
@@ -137,12 +257,27 @@ const redoBtn = document.getElementById('redoBtn');
 
 let history = [], historyIndex = -1, isUndoRedoAction = false;
 
+// নতুন জায়গায় কল করুন যেখানে history সেভ হয়
 function saveHistory() {
   if (isUndoRedoAction) return;
   if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
   history.push(textArea.value);
   historyIndex++;
   if (history.length > 50) { history.shift(); historyIndex--; }
+  updateUndoRedoButtons();
+}
+
+// পেজ লোড হলে কল করুন
+window.addEventListener('DOMContentLoaded', () => {
+  updatePreview(); saveHistory(); updateSuggestions();
+  updateUndoRedoButtons();
+});
+
+
+
+function updateUndoRedoButtons() {
+  undoBtn.disabled = historyIndex <= 0;
+  redoBtn.disabled = historyIndex >= history.length - 1;
 }
 
 function undo() {
@@ -151,6 +286,7 @@ function undo() {
     textArea.value = history[--historyIndex];
     updatePreview(); updateSuggestions();
     isUndoRedoAction = false;
+    updateUndoRedoButtons();
   }
 }
 
@@ -160,6 +296,7 @@ function redo() {
     textArea.value = history[++historyIndex];
     updatePreview(); updateSuggestions();
     isUndoRedoAction = false;
+    updateUndoRedoButtons();
   }
 }
 
@@ -316,6 +453,17 @@ function clearFilters() {
   document.getElementById('valueFilter').value = '';
   filterPreview();
 }
+
+
+let filterTimeout;
+function filterPreviewDebounced() {
+  clearTimeout(filterTimeout);
+  filterTimeout = setTimeout(filterPreview, 300);
+}
+
+document.getElementById('shortcutFilter').addEventListener('input', filterPreviewDebounced);
+document.getElementById('valueFilter').addEventListener('input', filterPreviewDebounced);
+
 </script>
 </body>
 </html>
