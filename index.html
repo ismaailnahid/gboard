@@ -1,171 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text File Editor Tool</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2, h3 {
-      margin-top: 0;
-    }
-    textarea, input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 10px;
-      font-family: monospace;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    textarea {
-      min-height: 180px;
-      resize: vertical;
-    }
-    #preview {
-      white-space: pre-wrap;
-      background: #fafafa;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-family: monospace;
-      min-height: 150px;
-    }
-    .btn {
-      background-color: #28a745;
-      color: white;
-      padding: 10px 16px;
-      margin: 5px 5px 10px 0;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .btn:hover {
-      background-color: #218838;
-    }
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    @media(min-width: 600px) {
-      .input-group {
-        flex-direction: row;
-      }
-    }
-    .input-group input {
-      flex: 1;
-    }
-    input[type="file"] {
-      margin-bottom: 15px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Responsive 3D Minimal Editor Tool</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .container {
+    width: 100%; max-width: 960px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px 28px;
+    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.3), -8px -8px 16px #ffffff;
+    display: flex; flex-direction: column; gap: 25px;
+  }
+  h2 { margin: 0 0 15px 0; font-weight: 700; color: #111; text-align: center; }
+  #fileInput, #textArea, .btn, .input-group input[type="text"] {
+    background: #f0f3f7;
+    border: none;
+    border-radius: 14px;
+    box-shadow: inset 6px 6px 10px #d1d9e6, inset -6px -6px 10px #ffffff;
+    transition: box-shadow 0.3s ease;
+  }
+  #fileInput {
+    padding: 12px 16px; font-size: 16px; cursor: pointer;
+  }
+  #fileInput:hover {
+    box-shadow: inset 4px 4px 8px #c2cae1, inset -4px -4px 8px #f5f8ff;
+  }
+  #textArea {
+    width: 100%; min-height: 180px;
+    font-family: monospace;
+    font-size: 15px;
+    padding: 16px 20px;
+    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
+    resize: vertical;
+  }
+  #textArea:focus {
+    outline: none;
+    box-shadow: inset 6px 6px 10px #c8d0e7, inset -6px -6px 10px #ffffff;
+  }
+  .undo-redo, .actions {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+  .btn {
+    padding: 12px 22px; font-size: 14px; font-weight: 600;
+    background: linear-gradient(145deg, #e1e7f0, #f9fbff);
+    color: #333;
+    cursor: pointer; user-select: none;
+    min-width: 120px; width: auto;
+    box-shadow: 6px 6px 10px rgba(163, 177, 198, 0.25), -6px -6px 10px #ffffff;
+  }
+  .btn:hover {
+    box-shadow: inset 4px 4px 8px #cfd8ef, inset -4px -4px 8px #f6faff;
+  }
+  .input-group {
+    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; align-items: center;
+  }
+  .input-group input[type="text"] {
+    flex: 1 1 200px; padding: 12px 16px; font-family: monospace; font-size: 15px;
+  }
+  .input-group button.btn {
+    padding: 10px 16px; height: 42px; align-self: center;
+  }
+  #preview {
+    min-height: 180px;
+    font-family: monospace; font-size: 15px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    background: #f0f3f7;
+    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 300px;
+    color: #222;
+  }
+  .highlight {
+    background-color: #fff7cc;
+    border-radius: 6px;
+    font-weight: 700;
+    padding: 0 6px;
+    color: #bfa31d;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h2>📂 Upload and Edit Your <code>documents.txt</code> File</h2>
-
-    <input type="file" id="fileInput" accept=".txt">
-    <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
-
-    <div class="input-group">
-      <input type="text" id="shortcutInput" placeholder="Shortcut">
-      <input type="text" id="valueInput" placeholder="Value">
-      <button class="btn" onclick="addEntry()">➕ Add</button>
-    </div>
-
-    <button class="btn" onclick="sortLines()">🔤 Sort A-Z</button>
-    <button class="btn" onclick="downloadFile()">⬇ Download Edited File</button>
-
-    <h3>📝 Final Preview</h3>
-    <div id="preview"></div>
+<div class="container">
+  <h2>📂 Upload and Edit Your <code>documents.txt</code> File</h2>
+  <input type="file" id="fileInput" accept=".txt" />
+  <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
+  <div class="undo-redo">
+    <button class="btn" id="undoBtn">↩ Undo</button>
+    <button class="btn" id="redoBtn">↪ Redo</button>
   </div>
+  <div class="actions">
+    <button class="btn" onclick="sortLines()">🔤 Sort </button>
+    <button class="btn" onclick="downloadFile()">⬇ Download </button>
+    <button class="btn" onclick="removeEmptyLines()">🧽 Remove </button>
+    <button class="btn" onclick="resetText()">🧹 Reset</button>
+    <button class="btn" onclick="refreshPage()">🔄 Refresh</button>
+    <button class="btn" onclick="removeDuplicates()">🗃️ Remove Duplicates</button>
+  </div>
+  <div class="input-group">
+    <input type="text" id="shortcutInput" placeholder="Shortcut" list="shortcutSuggestions" />
+    <input type="text" id="valueInput" placeholder="Value" list="valueSuggestions" />
+    <button class="btn" onclick="addEntry()">➕ Add</button>
+  </div>
+  <div class="input-group">
+    <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." oninput="filterPreview()" />
+    <input type="text" id="valueFilter" placeholder="🔍 Value..." oninput="filterPreview()" />
+  </div>
+  <button class="btn" onclick="clearFilters()">❌ Clear Filters</button>
+  <h3>📝 Final Preview</h3>
+  <div id="preview"></div>
+  <datalist id="shortcutSuggestions"></datalist>
+  <datalist id="valueSuggestions"></datalist>
+</div>
+<script>
+const fileInput = document.getElementById('fileInput');
+const textArea = document.getElementById('textArea');
+const preview = document.getElementById('preview');
+const shortcutInput = document.getElementById('shortcutInput');
+const valueInput = document.getElementById('valueInput');
+const undoBtn = document.getElementById('undoBtn');
+const redoBtn = document.getElementById('redoBtn');
 
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const textArea = document.getElementById('textArea');
-    const preview = document.getElementById('preview');
-    const shortcutInput = document.getElementById('shortcutInput');
-    const valueInput = document.getElementById('valueInput');
+let history = [], historyIndex = -1, isUndoRedoAction = false;
 
-    fileInput.addEventListener('change', function () {
-      const file = this.files[0];
-      if (file && file.name.endsWith('.txt')) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          textArea.value = e.target.result;
-          updatePreview();
-        };
-        reader.readAsText(file);
-      } else {
-        alert('Please upload a valid .txt file');
-      }
-    });
+function saveHistory() {
+  if (isUndoRedoAction) return;
+  if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
+  history.push(textArea.value);
+  historyIndex++;
+  if (history.length > 50) { history.shift(); historyIndex--; }
+}
 
-    textArea.addEventListener('input', updatePreview);
+function undo() {
+  if (historyIndex > 0) {
+    isUndoRedoAction = true;
+    textArea.value = history[--historyIndex];
+    updatePreview(); updateSuggestions();
+    isUndoRedoAction = false;
+  }
+}
 
-    function updatePreview() {
-      const lines = textArea.value.split('\n');
-      preview.innerHTML = lines.map(line => escapeHtml(line)).join('\n');
-    }
+function redo() {
+  if (historyIndex < history.length - 1) {
+    isUndoRedoAction = true;
+    textArea.value = history[++historyIndex];
+    updatePreview(); updateSuggestions();
+    isUndoRedoAction = false;
+  }
+}
 
-    function sortLines() {
-      const lines = textArea.value.split('\n');
-      const sorted = lines.sort((a, b) => a.localeCompare(b));
-      textArea.value = sorted.join('\n');
-      updatePreview();
-    }
+function updatePreview() {
+  const lines = textArea.value.split('\n');
+  const counts = {};
+  lines.forEach(line => {
+    const shortcut = line.split('\t')[0];
+    if (shortcut) counts[shortcut] = (counts[shortcut] || 0) + 1;
+  });
+  preview.innerHTML = lines.map(line => {
+    const shortcut = line.split('\t')[0];
+    const isDuplicate = counts[shortcut] > 1;
+    return `<div${isDuplicate ? ' class="highlight"' : ''}>${escapeHtml(line)}</div>`;
+  }).join('');
+  filterPreview();
+}
 
-    function addEntry() {
-      const shortcut = shortcutInput.value.trim();
-      const value = valueInput.value.trim();
-      if (shortcut && value) {
-        const newLine = `${shortcut}\t${value}\ten-US\t`;
-        textArea.value += (textArea.value ? '\n' : '') + newLine;
-        updatePreview();
-        shortcutInput.value = '';
-        valueInput.value = '';
-        shortcutInput.focus();
-      } else {
-        alert('Please enter both shortcut and value.');
-      }
-    }
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
 
-    function downloadFile() {
-      const text = textArea.value;
-      const blob = new Blob([text], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'edited_document.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
+function sortLines() {
+  const lines = textArea.value.split('\n');
+  const commentLines = lines.filter(line => line.trim().startsWith('#'));
+  const normalLines = lines.filter(line => !line.trim().startsWith('#'));
+  normalLines.sort((a, b) => a.localeCompare(b));
+  const finalLines = [...commentLines, ...normalLines];
+  textArea.value = finalLines.join('\n');
+  updatePreview(); saveHistory(); updateSuggestions();
+}
 
-    function escapeHtml(text) {
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    }
-  </script>
+function addEntry() {
+  const shortcut = shortcutInput.value.trim();
+  const value = valueInput.value.trim();
+  if (!shortcut || !value) return alert('Please enter both shortcut and value.');
+  const newLine = `${shortcut}\t${value}\ten-US\t`;
+  textArea.value += (textArea.value ? '\n' : '') + newLine;
+  shortcutInput.value = valueInput.value = '';
+  updatePreview(); saveHistory(); updateSuggestions();
+  shortcutInput.focus();
+}
+
+function downloadFile() {
+  const blob = new Blob([textArea.value], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'edited_document.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function updateSuggestions() {
+  const lines = textArea.value.split('\n');
+  const shortcutSet = new Set(), valueSet = new Set();
+  lines.forEach(line => {
+    const parts = line.split('\t');
+    if (parts[0]) shortcutSet.add(parts[0].trim());
+    if (parts[1]) valueSet.add(parts[1].trim());
+  });
+  const shortcutList = document.getElementById('shortcutSuggestions');
+  const valueList = document.getElementById('valueSuggestions');
+  shortcutList.innerHTML = '';
+  valueList.innerHTML = '';
+  shortcutSet.forEach(s => {
+    const option = document.createElement('option');
+    option.value = s;
+    shortcutList.appendChild(option);
+  });
+  valueSet.forEach(v => {
+    const option = document.createElement('option');
+    option.value = v;
+    valueList.appendChild(option);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  updatePreview(); saveHistory(); updateSuggestions();
+});
+
+textArea.addEventListener('input', () => {
+  updatePreview(); saveHistory(); updateSuggestions();
+});
+
+undoBtn.addEventListener('click', undo);
+redoBtn.addEventListener('click', redo);
+
+window.addEventListener('keydown', e => {
+  if (e.ctrlKey && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); }
+  else if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) { e.preventDefault(); redo(); }
+});
+
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if (!file || !file.name.endsWith('.txt')) return alert('Please upload a valid .txt file');
+  const reader = new FileReader();
+  reader.onload = e => {
+    textArea.value = e.target.result;
+    updatePreview(); saveHistory(); updateSuggestions();
+  };
+  reader.readAsText(file);
+});
+
+function resetText() {
+  textArea.value = '';
+  updatePreview(); shortcutInput.value = valueInput.value = '';
+  shortcutInput.focus();
+}
+
+function refreshPage() { location.reload(); }
+
+function removeEmptyLines() {
+  const lines = textArea.value.split('\n').filter(line => line.trim() !== '');
+  textArea.value = lines.join('\n');
+  updatePreview(); saveHistory(); updateSuggestions();
+}
+
+function filterPreview() {
+  const shortcutFilter = document.getElementById('shortcutFilter').value.toLowerCase();
+  const valueFilter = document.getElementById('valueFilter').value.toLowerCase();
+  const lines = textArea.value.split('\n');
+  const counts = {};
+  lines.forEach(line => {
+    const shortcut = line.split('\t')[0];
+    if (shortcut) counts[shortcut] = (counts[shortcut] || 0) + 1;
+  });
+  const filtered = lines.filter(line => {
+    const parts = line.split('\t');
+    const shortcut = parts[0]?.toLowerCase() || '';
+    const value = parts[1]?.toLowerCase() || '';
+    return shortcut.includes(shortcutFilter) && value.includes(valueFilter);
+  });
+  preview.innerHTML = filtered.map(line => {
+    const shortcut = line.split('\t')[0];
+    const isDuplicate = counts[shortcut] > 1;
+    return `<div${isDuplicate ? ' class="highlight"' : ''}>${escapeHtml(line)}</div>`;
+  }).join('');
+}
+
+function removeDuplicates() {
+  const lines = textArea.value.split('\n');
+  const seen = new Set();
+  const filtered = lines.filter(line => {
+    const shortcut = line.split('\t')[0];
+    if (seen.has(shortcut)) return false;
+    seen.add(shortcut);
+    return true;
+  });
+  textArea.value = filtered.join('\n');
+  updatePreview(); saveHistory(); updateSuggestions();
+}
+
+function clearFilters() {
+  document.getElementById('shortcutFilter').value = '';
+  document.getElementById('valueFilter').value = '';
+  filterPreview();
+}
+</script>
 </body>
 </html>
