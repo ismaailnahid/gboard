@@ -57,6 +57,10 @@
     padding: 16px 20px;
     box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
     resize: vertical;
+        white-space: nowrap;
+   overflow-y: auto;
+      text-overflow: ellipsis;
+    
   }
   #textArea:focus {
     outline: none;
@@ -154,8 +158,9 @@
     border-radius: 16px;
     background: #f0f3f7;
     box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
-    white-space: pre-wrap;
-    overflow-y: auto;
+    white-space: nowrap;
+   overflow-y: auto;
+      text-overflow: ellipsis;
     max-height: 300px;
     color: #222;
   }
@@ -239,25 +244,25 @@
     min-width: unset;
   }
 .input-group input#shortcutInput {
-  flex: 0 1 20%;
-  max-width: 20%;
+  flex: 0 1 40%;
+  max-width: 40%;
   min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
 }
 
 .input-group input#valueInput {
-  flex: 0 1 60%;
-  max-width: 60%;
+  flex: 0 1 1000%;
+  max-width: 100%;
   min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
 }
 .input-group input#shortcutFilter {
-  flex: 0 1 20%;
-  max-width: 20%;
+  flex: 0 1 40%;
+  max-width: 40%;
   min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
 }
 
 .input-group input#valueFilter {
-  flex: 0 1 60%;
-  max-width: 60%;
+  flex: 0 1 100%;
+  max-width: 100%;
   min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
 }
 
