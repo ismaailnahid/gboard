@@ -6,273 +6,22 @@
 <title>Gboard Editor</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  body {
-    margin: 0; padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f7fa;
-    color: #222;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-  }
-  .container {
-    width: 100%;
-    max-width: 960px;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 30px 28px;
-    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.3), -8px -8px 16px #ffffff;
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-  }
-  h2 {
-    margin: 0 0 15px 0;
-    font-weight: 700;
-    color: #111;
-    text-align: center;
-  }
-  #fileInput, #textArea, .btn, .input-group input[type="text"] {
-    background: #f0f3f7;
-    border: none;
-    border-radius: 14px;
-    box-shadow: inset 6px 6px 10px #d1d9e6, inset -6px -6px 10px #ffffff;
-    transition: box-shadow 0.3s ease;
-  }
-  #fileInput {
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-  }
-  #fileInput:hover {
-    box-shadow: inset 4px 4px 8px #c2cae1, inset -4px -4px 8px #f5f8ff;
-  }
-  #textArea {
-    width: 100%;
-    min-height: 180px;
-    font-family: monospace;
-    font-size: 15px;
-    padding: 16px 20px;
-    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
-    resize: vertical;
-        white-space: nowrap;
-   overflow-y: auto;
-      text-overflow: ellipsis;
-    
-  }
-  #textArea:focus {
-    outline: none;
-    box-shadow: inset 6px 6px 10px #c8d0e7, inset -6px -6px 10px #ffffff;
-  }
-  .undo-redo-reset, .actions {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .btn {
-    padding: 12px 22px;
-    font-size: 14px;
-    font-weight: 600;
-    background: linear-gradient(145deg, #e1e7f0, #f9fbff);
-    color: #333;
-    cursor: pointer;
-    user-select: none;
-    min-width: 120px;
-    width: auto;
-    box-shadow: 6px 6px 10px rgba(163, 177, 198, 0.25), -6px -6px 10px #ffffff;
-    border: none;
-    border-radius: 14px;
-    transition: box-shadow 0.3s ease;
-  }
-  .btn:hover {
-    box-shadow: inset 4px 4px 8px #cfd8ef, inset -4px -4px 8px #f6faff;
-  }
-  .input-group {
-  display: flex;
-  gap: 12px;
-  justify-content: center; /* ইনপুটগুলো মাঝখানে থাকবে */
-  flex-wrap: wrap; /* ছোট স্ক্রিনে নিচে নেমে যাবে */
-}
-
-.input-group input[type="text"] {
-  flex: 0 1 30%;  /* grow=0, shrink=1, base width=30% */
-  max-width: 300px; /* ইনপুট ফিল্ড সর্বোচ্চ 300px পর্যন্ত বড় হবে */
-  min-width: 150px; /* মিনিমাম 150px */
-  padding: 10px 14px;
-  font-size: 15px;
-  border-radius: 14px;
-  border: none;
-  background: #f0f3f7;
-  box-shadow: inset 6px 6px 10px #d1d9e6, inset -6px -6px 10px #ffffff;
-  transition: box-shadow 0.3s ease;
-}
-
-.input-group input[type="text"]:focus {
-  box-shadow: inset 4px 4px 8px #c2cae1, inset -4px -4px 8px #f5f8ff;
-  outline: none;
-}
-
-.input-group button.btn {
-  flex: 0 1 auto; /* বাটনের প্রস্থ নিজস্ব থাকবে */
-  padding: 10px 20px;
-  min-width: 120px;
-  border-radius: 14px;
-}  
-
-
-.input-group input#shortcutInput {
-  flex: 0 1 20%;
-  max-width: 20%;
-  min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-.input-group input#valueInput {
-  flex: 0 1 60%;
-  max-width: 60%;
-  min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-.input-group input#shortcutFilter {
-  flex: 0 1 20%;
-  max-width: 20%;
-  min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-.input-group input#valueFilter {
-  flex: 0 1 60%;
-  max-width: 60%;
-  min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-
-
-
-  #preview {
-    min-height: 180px;
-    font-family: monospace;
-    font-size: 15px;
-    padding: 20px 24px;
-    border-radius: 16px;
-    background: #f0f3f7;
-    box-shadow: 8px 8px 16px rgba(163, 177, 198, 0.25), -8px -8px 16px #ffffff;
-    white-space: nowrap;
-   overflow-y: auto;
-      text-overflow: ellipsis;
-    max-height: 300px;
-    color: #222;
-  }
-  .highlight {
-    background-color: #fff7cc;
-    border-radius: 6px;
-    font-weight: 700;
-    padding: 0 6px;
-    color: #bfa31d;
-  }
-  
-  /* ===== Responsive Part ===== */
-  @media (max-width: 720px) {
-    body {
-      padding: 15px 10px;
-      align-items: center;
-    }
-    .container {
-      padding: 20px 16px;
-      max-width: 100%;
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.25), -6px -6px 12px #ffffff;
-    }
-    #fileInput {
-      font-size: 14px;
-      padding: 10px 14px;
-    }
-    #textArea {
-      font-size: 14px;
-      padding: 14px 16px;
-      min-height: 140px;
-    }
-    .btn {
-      font-size: 13px;
-      padding: 10px 18px;
-      min-width: 100px;
-      flex: 1 1 auto;
-      box-shadow: 5px 5px 10px rgba(163, 177, 198, 0.2), -5px -5px 10px #ffffff;
-    }
-    .undo-redo, .actions {
-      gap: 12px;
-      justify-content: space-evenly;
-    }
-    .input-group {
-      flex-direction: column;
-      gap: 10px;
-      align-items: stretch;
-    }
-    .input-group input[type="text"] {
-      flex: unset;
-      width: 100%;
-      min-width: 0;
-      font-size: 14px;
-      padding: 10px 14px;
-    }
-    .input-group button.btn {
-      width: 100%;
-      height: 40px;
-      padding: 10px 14px;
-      font-size: 14px;
-      align-self: stretch;
-    }
-    #preview {
-      font-size: 14px;
-      padding: 16px 18px;
-      max-height: 240px;
-      min-height: 140px;
-    }
-  }
-
-  /* মোবাইল স্ক্রিনে একটু ছোট করে দিবে */
-@media (max-width: 480px) {
-  .input-group input[type="text"] {
-    flex: 0 1 80%; /* 80% width নেবে মোবাইলে */
-    max-width: none;
-    min-width: 100px;
-  }
-  .input-group button.btn {
-    flex: 0 1 80%;
-    min-width: unset;
-  }
-.input-group input#shortcutInput {
-  flex: 0 1 40%;
-  max-width: 40%;
-  min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-.input-group input#valueInput {
-  flex: 0 1 1000%;
-  max-width: 100%;
-  min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-.input-group input#shortcutFilter {
-  flex: 0 1 40%;
-  max-width: 40%;
-  min-width: 100px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-.input-group input#valueFilter {
-  flex: 0 1 100%;
-  max-width: 100%;
-  min-width: 150px; /* প্রয়োজনমতো কম-বেশি করতে পারো */
-}
-
-
-
-}
-
-
-
-
+  body { margin:0; padding:20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f7fa; color:#222; min-height:100vh; display:flex; justify-content:center; align-items:flex-start;}
+  .container { width:100%; max-width:960px; background:#fff; border-radius:16px; padding:30px; box-shadow:8px 8px 16px rgba(163,177,198,0.3),-8px -8px 16px #fff; display:flex; flex-direction:column; gap:25px;}
+  h2 { margin:0 0 15px; font-weight:700; color:#111; text-align:center; }
+  #fileInput { padding:12px 16px; font-size:16px; cursor:pointer; width:100%; border:none; border-radius:14px; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+  #fileInput:hover { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; }
+  #textArea { width:100%; min-height:180px; font-family:monospace; font-size:15px; padding:16px 20px; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; resize:vertical; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; }
+  #textArea:focus { outline:none; box-shadow:inset 6px 6px 10px #c8d0e7,inset -6px -6px 10px #fff; }
+  .undo-redo-reset, .actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .btn { padding:12px 22px; font-size:14px; font-weight:600; background:linear-gradient(145deg,#e1e7f0,#f9fbff); color:#333; cursor:pointer; user-select:none; min-width:120px; border:none; border-radius:14px; box-shadow:6px 6px 10px rgba(163,177,198,0.25),-6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+  .btn:hover { box-shadow: inset 4px 4px 8px #cfd8ef,inset -4px -4px 8px #f6faff; }
+  .input-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .input-group input[type="text"] { flex:0 1 30%; max-width:300px; min-width:150px; padding:10px 14px; font-size:15px; border-radius:14px; border:none; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+  .input-group input[type="text"]:focus { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; outline:none; }
+  #preview { min-height:180px; font-family:monospace; font-size:15px; padding:20px 24px; border-radius:16px; background:#f0f3f7; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; max-height:300px; color:#222;}
+  .highlight { background-color:#fff7cc; border-radius:6px; font-weight:700; padding:0 6px; color:#bfa31d; }
+  @media (max-width:720px){ body{padding:15px 10px; align-items:center;} .container{padding:20px 16px; max-width:100%; width:100%; border-radius:12px; box-shadow:6px 6px 12px rgba(163,177,198,0.25),-6px -6px 12px #fff;} #fileInput{font-size:14px;padding:10px 14px;} #textArea{font-size:14px; padding:14px 16px; min-height:140px;} .btn{font-size:13px;padding:10px 18px; min-width:100px; flex:1 1 auto; box-shadow:5px 5px 10px rgba(163,177,198,0.2),-5px -5px 10px #fff;} .undo-redo,.actions{gap:12px; justify-content:space-evenly;} .input-group{flex-direction:column; gap:10px; align-items:stretch;} .input-group input[type="text"]{flex:unset;width:100%;min-width:0;font-size:14px;padding:10px 14px;} .input-group button.btn{width:100%;height:40px;padding:10px 14px;font-size:14px;align-self:stretch;} #preview{font-size:14px;padding:16px 18px; max-height:240px; min-height:140px;} }
 </style>
 </head>
 <body>
@@ -280,39 +29,49 @@
   <h2>📂 Gboard Dictionary Editor</h2>
   <input type="file" id="fileInput" accept=".txt" />
   <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
+
   <div class="undo-redo-reset">
     <button class="btn" id="undoBtn">↩ Undo</button>
     <button class="btn" id="redoBtn">↪ Redo</button>
-        <button class="btn" onclick="resetText()">🧹 Reset</button>
+    <button class="btn" onclick="resetText()">🧹 Reset</button>
     <button class="btn" onclick="refreshPage()">🔄 Refresh</button>
-
-
   </div>
+
   <div class="actions">
-    <button class="btn" onclick="sortLines()">🔤 Sort </button>
-  
+    <button class="btn" onclick="sortLines()">🔤 Sort</button>
     <button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
     <button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
-      <button class="btn" onclick="downloadFile()">⬇ Download </button>
+    <button class="btn" onclick="downloadFile()">⬇ Download</button>
   </div>
+
   <div class="input-group">
     <input type="text" id="shortcutInput" placeholder="Shortcut" list="shortcutSuggestions" />
     <input type="text" id="valueInput" placeholder="Value" list="valueSuggestions" />
     <button class="btn" onclick="addEntry()">➕ Add</button>
   </div>
+
   <div class="input-group">
-    <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." oninput="filterPreview()" />
-    <input type="text" id="valueFilter" placeholder="🔍 Value..." oninput="filterPreview()" />
+    <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." list="shortcutSuggestions" />
+    <input type="text" id="valueFilter" placeholder="🔍 Value..." list="valueSuggestions" />
   </div>
+
   <button class="btn" onclick="clearFilters()">❌ Clear Filters</button>
+
   <h3>📝 Final Preview</h3>
   <div id="preview"></div>
+  <div id="stats"></div>
+
   <datalist id="shortcutSuggestions"></datalist>
   <datalist id="valueSuggestions"></datalist>
+
+  <div class="input-group">
+    <input type="text" id="editShortcut" placeholder="Edit Shortcut">
+    <input type="text" id="editValue" placeholder="Edit Value">
+    <button class="btn" id="applyEditBtn">Apply Edit</button>
+  </div>
 </div>
 
 <script>
-// Your existing JS code here (unchanged, same as you provided)
 const fileInput = document.getElementById('fileInput');
 const textArea = document.getElementById('textArea');
 const preview = document.getElementById('preview');
@@ -320,216 +79,146 @@ const shortcutInput = document.getElementById('shortcutInput');
 const valueInput = document.getElementById('valueInput');
 const undoBtn = document.getElementById('undoBtn');
 const redoBtn = document.getElementById('redoBtn');
+const shortcutFilter = document.getElementById('shortcutFilter');
+const valueFilter = document.getElementById('valueFilter');
+const editShortcut = document.getElementById('editShortcut');
+const editValue = document.getElementById('editValue');
+const applyEditBtn = document.getElementById('applyEditBtn');
+const stats = document.getElementById('stats');
 
-let history = [], historyIndex = -1, isUndoRedoAction = false;
+let history=[], historyIndex=-1, isUndoRedoAction=false;
+let filteredLines=[], selectedIndex=-1;
 
-// নতুন জায়গায় কল করুন যেখানে history সেভ হয়
-function saveHistory() {
-  if (isUndoRedoAction) return;
-  if (historyIndex < history.length - 1) history = history.slice(0, historyIndex + 1);
-  history.push(textArea.value);
-  historyIndex++;
-  if (history.length > 50) { history.shift(); historyIndex--; }
-  updateUndoRedoButtons();
-}
+// ------------------- History -------------------
+function saveHistory(){ if(isUndoRedoAction)return; if(historyIndex<history.length-1)history=history.slice(0,historyIndex+1); history.push(textArea.value); historyIndex++; if(history.length>50){history.shift(); historyIndex--;} updateUndoRedoButtons(); }
+function updateUndoRedoButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1; }
+function undo(){ if(historyIndex>0){ isUndoRedoAction=true; textArea.value=history[--historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
+function redo(){ if(historyIndex<history.length-1){ isUndoRedoAction=true; textArea.value=history[++historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
 
-// পেজ লোড হলে কল করুন
-window.addEventListener('DOMContentLoaded', () => {
-  updatePreview(); saveHistory(); updateSuggestions();
-  updateUndoRedoButtons();
-});
+// ------------------- Escape -------------------
+function escapeHtml(text){ return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-
-
-function updateUndoRedoButtons() {
-  undoBtn.disabled = historyIndex <= 0;
-  redoBtn.disabled = historyIndex >= history.length - 1;
-}
-
-function undo() {
-  if (historyIndex > 0) {
-    isUndoRedoAction = true;
-    textArea.value = history[--historyIndex];
-    updatePreview(); updateSuggestions();
-    isUndoRedoAction = false;
-    updateUndoRedoButtons();
-  }
-}
-
-function redo() {
-  if (historyIndex < history.length - 1) {
-    isUndoRedoAction = true;
-    textArea.value = history[++historyIndex];
-    updatePreview(); updateSuggestions();
-    isUndoRedoAction = false;
-    updateUndoRedoButtons();
-  }
-}
-
-function updatePreview() {
+// ------------------- Preview -------------------
+function updatePreview(){
   const lines = textArea.value.split('\n');
   const counts = {};
-  lines.forEach(line => {
-    const shortcut = line.split('\t')[0];
-    if (shortcut) counts[shortcut] = (counts[shortcut] || 0) + 1;
-  });
-  preview.innerHTML = lines.map(line => {
-    const shortcut = line.split('\t')[0];
-    const isDuplicate = counts[shortcut] > 1;
-    return `<div${isDuplicate ? ' class="highlight"' : ''}>${escapeHtml(line)}</div>`;
-  }).join('');
-  filterPreview();
-}
+  lines.forEach(line=>{ const sc=line.split('\t')[0]; if(sc) counts[sc]=(counts[sc]||0)+1; });
 
-function escapeHtml(text) {
-  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
-
-function sortLines() {
-  const lines = textArea.value.split('\n');
-  const commentLines = lines.filter(line => line.trim().startsWith('#'));
-  const normalLines = lines.filter(line => !line.trim().startsWith('#'));
-  normalLines.sort((a, b) => a.localeCompare(b));
-  const finalLines = [...commentLines, ...normalLines];
-  textArea.value = finalLines.join('\n');
-  updatePreview(); saveHistory(); updateSuggestions();
-}
-
-function addEntry() {
-  const shortcut = shortcutInput.value.trim();
-  const value = valueInput.value.trim();
-  if (!shortcut || !value) return alert('Please enter both shortcut and value.');
-  const newLine = `${shortcut}\t${value}\ten-US\t`;
-  textArea.value += (textArea.value ? '\n' : '') + newLine;
-  shortcutInput.value = valueInput.value = '';
-  updatePreview(); saveHistory(); updateSuggestions();
-  shortcutInput.focus();
-}
-
-function downloadFile() {
-  const blob = new Blob([textArea.value], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'edited_document.txt'; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function updateSuggestions() {
-  const lines = textArea.value.split('\n');
-  const shortcutSet = new Set(), valueSet = new Set();
-  lines.forEach(line => {
+  // Filter
+  const sFilter = shortcutFilter.value.toLowerCase();
+  const vFilter = valueFilter.value.toLowerCase();
+  filteredLines = lines.filter(line=>{
     const parts = line.split('\t');
-    if (parts[0]) shortcutSet.add(parts[0].trim());
-    if (parts[1]) valueSet.add(parts[1].trim());
+    return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
   });
-  const shortcutList = document.getElementById('shortcutSuggestions');
-  const valueList = document.getElementById('valueSuggestions');
-  shortcutList.innerHTML = '';
-  valueList.innerHTML = '';
-  shortcutSet.forEach(s => {
-    const option = document.createElement('option');
-    option.value = s;
-    shortcutList.appendChild(option);
-  });
-  valueSet.forEach(v => {
-    const option = document.createElement('option');
-    option.value = v;
-    valueList.appendChild(option);
-  });
+
+  preview.innerHTML = filteredLines.map((line,i)=>{
+    const sc = line.split('\t')[0];
+    const isDup = counts[sc]>1;
+    const isSelected = i===selectedIndex;
+    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}">${escapeHtml(line)}</div>`;
+  }).join('');
+
+  // Stats
+  let dup=0;
+  for(let k in counts) if(counts[k]>1) dup+=counts[k]-1;
+  stats.textContent=`Total Lines: ${lines.length} | Duplicate Shortcuts: ${dup}`;
+
+  // Fill editable filter if selection
+  if(selectedIndex>=0 && filteredLines[selectedIndex]){
+    const parts=filteredLines[selectedIndex].split('\t');
+    editShortcut.value=parts[0]||'';
+    editValue.value=parts[1]||'';
+  } else { editShortcut.value=''; editValue.value=''; }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  updatePreview(); saveHistory(); updateSuggestions();
-});
+// ------------------- Suggestions -------------------
+function updateSuggestions(){
+  const lines = textArea.value.split('\n');
+  const sSet = new Set(), vSet = new Set();
+  lines.forEach(line=>{ const p=line.split('\t'); if(p[0]) sSet.add(p[0].trim()); if(p[1]) vSet.add(p[1].trim()); });
+  const shortcutList=document.getElementById('shortcutSuggestions');
+  const valueList=document.getElementById('valueSuggestions');
+  shortcutList.innerHTML=''; valueList.innerHTML='';
+  Array.from(sSet).sort().forEach(s=>{ const opt=document.createElement('option'); opt.value=s; shortcutList.appendChild(opt); });
+  Array.from(vSet).sort().forEach(v=>{ const opt=document.createElement('option'); opt.value=v; valueList.appendChild(opt); });
+}
 
-textArea.addEventListener('input', () => {
-  updatePreview(); saveHistory(); updateSuggestions();
-});
-
-undoBtn.addEventListener('click', undo);
-redoBtn.addEventListener('click', redo);
-
-window.addEventListener('keydown', e => {
-  if (e.ctrlKey && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); }
-  else if ((e.ctrlKey && e.key === 'y') || (e.ctrlKey && e.shiftKey && e.key === 'z')) { e.preventDefault(); redo(); }
-});
-
-fileInput.addEventListener('change', () => {
-  const file = fileInput.files[0];
-  if (!file || !file.name.endsWith('.txt')) return alert('Please upload a valid .txt file');
-  const reader = new FileReader();
-  reader.onload = e => {
-    textArea.value = e.target.result;
+// ------------------- File -------------------
+fileInput.addEventListener('change',()=>{
+  const file=fileInput.files[0];
+  if(!file||!file.name.endsWith('.txt')) return alert('Please upload a valid .txt file');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    textArea.value=e.target.result;
     updatePreview(); saveHistory(); updateSuggestions();
   };
   reader.readAsText(file);
 });
 
-function resetText() {
-  textArea.value = '';
-  updatePreview(); shortcutInput.value = valueInput.value = '';
-  shortcutInput.focus();
-}
+// ------------------- TextArea -------------------
+textArea.addEventListener('input',()=>{ updatePreview(); saveHistory(); updateSuggestions(); });
 
-function refreshPage() { location.reload(); }
+// ------------------- Undo/Redo -------------------
+undoBtn.addEventListener('click',undo);
+redoBtn.addEventListener('click',redo);
+window.addEventListener('keydown',e=>{
+  if(e.ctrlKey && !e.shiftKey && e.key==='z'){ e.preventDefault(); undo(); }
+  else if((e.ctrlKey && e.key==='y')||(e.ctrlKey && e.shiftKey && e.key==='Z')){ e.preventDefault(); redo(); }
+});
 
-function removeEmptyLines() {
-  const lines = textArea.value.split('\n').filter(line => line.trim() !== '');
-  textArea.value = lines.join('\n');
+// ------------------- Actions -------------------
+function resetText(){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); }
+function refreshPage(){ location.reload(); }
+function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true; }).join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.value.trim(); if(!sc||!val) return alert('Please enter both shortcut and value.'); textArea.value+=(textArea.value?'\n':'')+`${sc}\t${val}\ten-US\t`; shortcutInput.value=valueInput.value=''; updatePreview(); saveHistory(); updateSuggestions(); shortcutInput.focus(); }
+function downloadFile(){ const blob=new Blob([textArea.value],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='edited_document.txt'; a.click(); URL.revokeObjectURL(url); }
+
+// ------------------- Filters -------------------
+shortcutFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+valueFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+function clearFilters(){ shortcutFilter.value=valueFilter.value=''; selectedIndex=-1; updatePreview(); updateSuggestions(); }
+
+// ------------------- TextArea Click -------------------
+textArea.addEventListener('click',()=>{
+  const cursor=textArea.selectionStart;
+  const lines=textArea.value.split('\n'); let cumulative=0,clicked=-1;
+  for(let i=0;i<lines.length;i++){ cumulative+=lines[i].length+1; if(cursor<=cumulative){clicked=i; break;} }
+  if(clicked>=0){
+    const clickedLine=lines[clicked];
+    const fi=filteredLines.indexOf(clickedLine);
+    if(fi>=0) selectedIndex=fi;
+    else { filteredLines=[clickedLine]; selectedIndex=0; }
+    updatePreview();
+  }
+});
+
+// ------------------- Arrow Navigation -------------------
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.min(selectedIndex+1,filteredLines.length-1); updatePreview(); }
+  if(e.key==='ArrowUp' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.max(selectedIndex-1,0); updatePreview(); }
+});
+
+// ------------------- Editable Filter Apply -------------------
+applyEditBtn.addEventListener('click',()=>{
+  if(selectedIndex<0) return;
+  const lines=textArea.value.split('\n');
+  const targetLine=filteredLines[selectedIndex];
+  const indexInAll=lines.indexOf(targetLine);
+  if(indexInAll<0) return;
+  lines[indexInAll]=`${editShortcut.value}\t${editValue.value}\ten-US\t`;
+  textArea.value=lines.join('\n');
   updatePreview(); saveHistory(); updateSuggestions();
-}
+});
 
-function filterPreview() {
-  const shortcutFilter = document.getElementById('shortcutFilter').value.toLowerCase();
-  const valueFilter = document.getElementById('valueFilter').value.toLowerCase();
-  const lines = textArea.value.split('\n');
-  const counts = {};
-  lines.forEach(line => {
-    const shortcut = line.split('\t')[0];
-    if (shortcut) counts[shortcut] = (counts[shortcut] || 0) + 1;
-  });
-  const filtered = lines.filter(line => {
-    const parts = line.split('\t');
-    const shortcut = parts[0]?.toLowerCase() || '';
-    const value = parts[1]?.toLowerCase() || '';
-    return shortcut.includes(shortcutFilter) && value.includes(valueFilter);
-  });
-  preview.innerHTML = filtered.map(line => {
-    const shortcut = line.split('\t')[0];
-    const isDuplicate = counts[shortcut] > 1;
-    return `<div${isDuplicate ? ' class="highlight"' : ''}>${escapeHtml(line)}</div>`;
-  }).join('');
-}
+// ------------------- Apply on Enter -------------------
+editShortcut.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
+editValue.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
 
-function removeDuplicates() {
-  const lines = textArea.value.split('\n');
-  const seen = new Set();
-  const filtered = lines.filter(line => {
-    const shortcut = line.split('\t')[0];
-    if (seen.has(shortcut)) return false;
-    seen.add(shortcut);
-    return true;
-  });
-  textArea.value = filtered.join('\n');
-  updatePreview(); saveHistory(); updateSuggestions();
-}
-
-function clearFilters() {
-  document.getElementById('shortcutFilter').value = '';
-  document.getElementById('valueFilter').value = '';
-  filterPreview();
-}
-
-
-let filterTimeout;
-function filterPreviewDebounced() {
-  clearTimeout(filterTimeout);
-  filterTimeout = setTimeout(filterPreview, 300);
-}
-
-document.getElementById('shortcutFilter').addEventListener('input', filterPreviewDebounced);
-document.getElementById('valueFilter').addEventListener('input', filterPreviewDebounced);
-
+// Initialize
+window.addEventListener('DOMContentLoaded',()=>{ updatePreview(); saveHistory(); updateSuggestions(); });
 </script>
 </body>
 </html>
