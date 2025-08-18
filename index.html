@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Gboard Editor</title>
+<title>Gboard Dictionary Editor</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   body { margin:0; padding:20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f7fa; color:#222; min-height:100vh; display:flex; justify-content:center; align-items:flex-start;}
@@ -27,7 +27,7 @@
 <body>
 <div class="container">
   <h2>📂 Gboard Dictionary Editor</h2>
-  <input type="file" id="fileInput" accept=".txt" />
+  <input type="file" id="fileInput" accept=".txt,.zip" />
   <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
 
   <div class="undo-redo-reset">
@@ -71,6 +71,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 const fileInput = document.getElementById('fileInput');
 const textArea = document.getElementById('textArea');
@@ -104,38 +105,35 @@ function updatePreview(){
   const counts = {};
   lines.forEach(line=>{ const sc=line.split('\t')[0]; if(sc) counts[sc]=(counts[sc]||0)+1; });
 
-  // Filter
   const sFilter = shortcutFilter.value.toLowerCase();
   const vFilter = valueFilter.value.toLowerCase();
-  filteredLines = lines.filter(line=>{
-    const parts = line.split('\t');
-    return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
-  });
+  filteredLines = lines.filter(line=>{ const parts=line.split('\t'); return parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter); });
 
   preview.innerHTML = filteredLines.map((line,i)=>{
-    const sc = line.split('\t')[0];
-    const isDup = counts[sc]>1;
-    const isSelected = i===selectedIndex;
-    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}">${escapeHtml(line)}</div>`;
+    const sc=line.split('\t')[0];
+    const isDup=counts[sc]>1;
+    const isSelected=i===selectedIndex;
+    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}" id="line-${i}">${escapeHtml(line)}</div>`;
   }).join('');
 
-  // Stats
-  let dup=0;
-  for(let k in counts) if(counts[k]>1) dup+=counts[k]-1;
+  if(selectedIndex>=0){
+    const el=document.getElementById(`line-${selectedIndex}`);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  let dup=0; for(let k in counts) if(counts[k]>1) dup+=counts[k]-1;
   stats.textContent=`Total Lines: ${lines.length} | Duplicate Shortcuts: ${dup}`;
 
-  // Fill editable filter if selection
   if(selectedIndex>=0 && filteredLines[selectedIndex]){
     const parts=filteredLines[selectedIndex].split('\t');
-    editShortcut.value=parts[0]||'';
-    editValue.value=parts[1]||'';
+    editShortcut.value=parts[0]||''; editValue.value=parts[1]||'';
   } else { editShortcut.value=''; editValue.value=''; }
 }
 
 // ------------------- Suggestions -------------------
 function updateSuggestions(){
-  const lines = textArea.value.split('\n');
-  const sSet = new Set(), vSet = new Set();
+  const lines=textArea.value.split('\n');
+  const sSet=new Set(),vSet=new Set();
   lines.forEach(line=>{ const p=line.split('\t'); if(p[0]) sSet.add(p[0].trim()); if(p[1]) vSet.add(p[1].trim()); });
   const shortcutList=document.getElementById('shortcutSuggestions');
   const valueList=document.getElementById('valueSuggestions');
@@ -144,16 +142,23 @@ function updateSuggestions(){
   Array.from(vSet).sort().forEach(v=>{ const opt=document.createElement('option'); opt.value=v; valueList.appendChild(opt); });
 }
 
-// ------------------- File -------------------
-fileInput.addEventListener('change',()=>{
+// ------------------- File Upload -------------------
+fileInput.addEventListener('change', async ()=>{
   const file=fileInput.files[0];
-  if(!file||!file.name.endsWith('.txt')) return alert('Please upload a valid .txt file');
-  const reader=new FileReader();
-  reader.onload=e=>{
-    textArea.value=e.target.result;
+  if(!file) return;
+
+  if(file.name.endsWith('.txt')){
+    const reader=new FileReader();
+    reader.onload=e=>{ textArea.value=e.target.result; updatePreview(); saveHistory(); updateSuggestions(); };
+    reader.readAsText(file);
+  } else if(file.name.endsWith('.zip')){
+    const zip=await JSZip.loadAsync(file);
+    const txtFileName=Object.keys(zip.files).find(name=>name.endsWith('dictionary.txt'));
+    if(!txtFileName) return alert('Zip এর মধ্যে dictionary.txt নেই');
+    const content=await zip.files[txtFileName].async('string');
+    textArea.value=content;
     updatePreview(); saveHistory(); updateSuggestions();
-  };
-  reader.readAsText(file);
+  } else { alert('Please upload a valid .txt or .zip file'); }
 });
 
 // ------------------- TextArea -------------------
@@ -168,8 +173,8 @@ window.addEventListener('keydown',e=>{
 });
 
 // ------------------- Actions -------------------
-function resetText(){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); }
-function refreshPage(){ location.reload(); }
+function resetText(){ if(confirm("আপনি কি সত্যিই সব ডিলিট করতে চান?")){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); } }
+function refreshPage(){ if(confirm("আপনি কি সত্যিই পেজ রিফ্রেশ করতে চান?")) location.reload(); }
 function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
 function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true; }).join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
 function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
@@ -177,8 +182,8 @@ function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.v
 function downloadFile(){ const blob=new Blob([textArea.value],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='edited_document.txt'; a.click(); URL.revokeObjectURL(url); }
 
 // ------------------- Filters -------------------
-shortcutFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
-valueFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+shortcutFilter.addEventListener('input',()=>{ selectedIndex=0; updatePreview(); updateSuggestions(); });
+valueFilter.addEventListener('input',()=>{ selectedIndex=0; updatePreview(); updateSuggestions(); });
 function clearFilters(){ shortcutFilter.value=valueFilter.value=''; selectedIndex=-1; updatePreview(); updateSuggestions(); }
 
 // ------------------- TextArea Click -------------------
@@ -186,13 +191,7 @@ textArea.addEventListener('click',()=>{
   const cursor=textArea.selectionStart;
   const lines=textArea.value.split('\n'); let cumulative=0,clicked=-1;
   for(let i=0;i<lines.length;i++){ cumulative+=lines[i].length+1; if(cursor<=cumulative){clicked=i; break;} }
-  if(clicked>=0){
-    const clickedLine=lines[clicked];
-    const fi=filteredLines.indexOf(clickedLine);
-    if(fi>=0) selectedIndex=fi;
-    else { filteredLines=[clickedLine]; selectedIndex=0; }
-    updatePreview();
-  }
+  if(clicked>=0){ const clickedLine=lines[clicked]; const fi=filteredLines.indexOf(clickedLine); selectedIndex=(fi>=0)?fi:0; updatePreview(); }
 });
 
 // ------------------- Arrow Navigation -------------------
@@ -208,17 +207,17 @@ applyEditBtn.addEventListener('click',()=>{
   const targetLine=filteredLines[selectedIndex];
   const indexInAll=lines.indexOf(targetLine);
   if(indexInAll<0) return;
-  lines[indexInAll]=`${editShortcut.value}\t${editValue.value}\ten-US\t`;
-  textArea.value=lines.join('\n');
-  updatePreview(); saveHistory(); updateSuggestions();
+  const parts=lines[indexInAll].split('\t');
+  parts[0]=editShortcut.value; parts[1]=editValue.value;
+  lines[indexInAll]=parts.join('\t');
+  textArea.value=lines.join('\n'); updatePreview(); saveHistory(); updateSuggestions();
 });
 
-// ------------------- Apply on Enter -------------------
-editShortcut.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
-editValue.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
+// Apply edit on Enter
+editShortcut.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); } });
+editValue.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); } });
 
-// Initialize
-window.addEventListener('DOMContentLoaded',()=>{ updatePreview(); saveHistory(); updateSuggestions(); });
+saveHistory(); updatePreview();
 </script>
 </body>
 </html>
