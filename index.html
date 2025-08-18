@@ -5,23 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Gboard Editor</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  body { margin:0; padding:20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f7fa; color:#222; min-height:100vh; display:flex; justify-content:center; align-items:flex-start;}
-  .container { width:100%; max-width:960px; background:#fff; border-radius:16px; padding:30px; box-shadow:8px 8px 16px rgba(163,177,198,0.3),-8px -8px 16px #fff; display:flex; flex-direction:column; gap:25px;}
-  h2 { margin:0 0 15px; font-weight:700; color:#111; text-align:center; }
-  #fileInput { padding:12px 16px; font-size:16px; cursor:pointer; width:100%; border:none; border-radius:14px; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  #fileInput:hover { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; }
-  #textArea { width:100%; min-height:180px; font-family:monospace; font-size:15px; padding:16px 20px; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; resize:vertical; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; }
-  #textArea:focus { outline:none; box-shadow:inset 6px 6px 10px #c8d0e7,inset -6px -6px 10px #fff; }
-  .undo-redo-reset, .actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
-  .btn { padding:12px 22px; font-size:14px; font-weight:600; background:linear-gradient(145deg,#e1e7f0,#f9fbff); color:#333; cursor:pointer; user-select:none; min-width:120px; border:none; border-radius:14px; box-shadow:6px 6px 10px rgba(163,177,198,0.25),-6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  .btn:hover { box-shadow: inset 4px 4px 8px #cfd8ef,inset -4px -4px 8px #f6faff; }
-  .input-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  .input-group input[type="text"] { flex:0 1 30%; max-width:300px; min-width:150px; padding:10px 14px; font-size:15px; border-radius:14px; border:none; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  .input-group input[type="text"]:focus { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; outline:none; }
-  #preview { min-height:180px; font-family:monospace; font-size:15px; padding:20px 24px; border-radius:16px; background:#f0f3f7; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; max-height:300px; color:#222;}
-  .highlight { background-color:#fff7cc; border-radius:6px; font-weight:700; padding:0 6px; color:#bfa31d; }
-  @media (max-width:720px){ body{padding:15px 10px; align-items:center;} .container{padding:20px 16px; max-width:100%; width:100%; border-radius:12px; box-shadow:6px 6px 12px rgba(163,177,198,0.25),-6px -6px 12px #fff;} #fileInput{font-size:14px;padding:10px 14px;} #textArea{font-size:14px; padding:14px 16px; min-height:140px;} .btn{font-size:13px;padding:10px 18px; min-width:100px; flex:1 1 auto; box-shadow:5px 5px 10px rgba(163,177,198,0.2),-5px -5px 10px #fff;} .undo-redo,.actions{gap:12px; justify-content:space-evenly;} .input-group{flex-direction:column; gap:10px; align-items:stretch;} .input-group input[type="text"]{flex:unset;width:100%;min-width:0;font-size:14px;padding:10px 14px;} .input-group button.btn{width:100%;height:40px;padding:10px 14px;font-size:14px;align-self:stretch;} #preview{font-size:14px;padding:16px 18px; max-height:240px; min-height:140px;} }
+/* ====== Stylish Neumorphism CSS ====== */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin:0; padding:20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f7fa; color:#222; min-height:100vh; display:flex; justify-content:center; align-items:flex-start;}
+.container { width:100%; max-width:960px; background:#fff; border-radius:16px; padding:30px; box-shadow:8px 8px 16px rgba(163,177,198,0.3),-8px -8px 16px #fff; display:flex; flex-direction:column; gap:25px;}
+h2 { margin:0 0 15px; font-weight:700; color:#111; text-align:center; }
+#fileInput { padding:12px 16px; font-size:16px; cursor:pointer; width:100%; border:none; border-radius:14px; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+#fileInput:hover { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; }
+#textArea { width:100%; min-height:180px; font-family:monospace; font-size:15px; padding:16px 20px; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; resize:vertical; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; }
+#textArea:focus { outline:none; box-shadow:inset 6px 6px 10px #c8d0e7,inset -6px -6px 10px #fff; }
+.undo-redo-reset, .actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+.btn { padding:12px 22px; font-size:14px; font-weight:600; background:linear-gradient(145deg,#e1e7f0,#f9fbff); color:#333; cursor:pointer; user-select:none; min-width:120px; border:none; border-radius:14px; box-shadow:6px 6px 10px rgba(163,177,198,0.25),-6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+.btn:hover { box-shadow: inset 4px 4px 8px #cfd8ef,inset -4px -4px 8px #f6faff; }
+.input-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.input-group input[type="text"] { flex:0 1 30%; max-width:300px; min-width:150px; padding:10px 14px; font-size:15px; border-radius:14px; border:none; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
+.input-group input[type="text"]:focus { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; outline:none; }
+#preview { min-height:180px; font-family:monospace; font-size:15px; padding:20px 24px; border-radius:16px; background:#f0f3f7; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; max-height:300px; color:#222;}
+.highlight { background-color:#fff7cc; border-radius:6px; font-weight:700; padding:0 6px; color:#bfa31d; }
+@media (max-width:720px){ body{padding:15px 10px; align-items:center;} .container{padding:20px 16px; max-width:100%; width:100%; border-radius:12px; box-shadow:6px 6px 12px rgba(163,177,198,0.25),-6px -6px 12px #fff;} #fileInput{font-size:14px;padding:10px 14px;} #textArea{font-size:14px; padding:14px 16px; min-height:140px;} .btn{font-size:13px;padding:10px 18px; min-width:100px; flex:1 1 auto; box-shadow:5px 5px 10px rgba(163,177,198,0.2),-5px -5px 10px #fff;} .undo-redo,.actions{gap:12px; justify-content:space-evenly;} .input-group{flex-direction:column; gap:10px; align-items:stretch;} .input-group input[type="text"]{flex:unset;width:100%;min-width:0;font-size:14px;padding:10px 14px;} .input-group button.btn{width:100%;height:40px;padding:10px 14px;font-size:14px;align-self:stretch;} #preview{font-size:14px;padding:16px 18px; max-height:240px; min-height:140px;} }
 </style>
 </head>
 <body>
@@ -41,7 +42,8 @@
     <button class="btn" onclick="sortLines()">🔤 Sort</button>
     <button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
     <button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
-    <button class="btn" onclick="downloadFile()">⬇ Download</button>
+    <button class="btn" onclick="downloadFile()">⬇ Download TXT</button>
+    <button class="btn" onclick="downloadZip()">⬇ Download ZIP</button>
   </div>
 
   <div class="input-group">
@@ -71,7 +73,9 @@
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
+// ===== Variables =====
 const fileInput = document.getElementById('fileInput');
 const textArea = document.getElementById('textArea');
 const preview = document.getElementById('preview');
@@ -89,16 +93,16 @@ const stats = document.getElementById('stats');
 let history=[], historyIndex=-1, isUndoRedoAction=false;
 let filteredLines=[], selectedIndex=-1;
 
-// ------------------- History -------------------
+// ===== History =====
 function saveHistory(){ if(isUndoRedoAction)return; if(historyIndex<history.length-1)history=history.slice(0,historyIndex+1); history.push(textArea.value); historyIndex++; if(history.length>50){history.shift(); historyIndex--;} updateUndoRedoButtons(); }
 function updateUndoRedoButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1; }
-function undo(){ if(historyIndex>0){ isUndoRedoAction=true; textArea.value=history[--historyIndex]; updateAll(false); isUndoRedoAction=false; updateUndoRedoButtons(); }}
-function redo(){ if(historyIndex<history.length-1){ isUndoRedoAction=true; textArea.value=history[++historyIndex]; updateAll(false); isUndoRedoAction=false; updateUndoRedoButtons(); }}
+function undo(){ if(historyIndex>0){ isUndoRedoAction=true; textArea.value=history[--historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
+function redo(){ if(historyIndex<history.length-1){ isUndoRedoAction=true; textArea.value=history[++historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
 
-// ------------------- Escape -------------------
+// ===== Escape =====
 function escapeHtml(text){ return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ------------------- Preview & Editable -------------------
+// ===== Preview =====
 function updatePreview(){
   const lines = textArea.value.split('\n');
   const counts = {};
@@ -106,35 +110,22 @@ function updatePreview(){
 
   const sFilter = shortcutFilter.value.toLowerCase();
   const vFilter = valueFilter.value.toLowerCase();
-  filteredLines = lines.filter(line=>{
-    const parts = line.split('\t');
-    return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
-  });
+  filteredLines = lines.filter(line=>{ const parts = line.split('\t'); return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter)); });
 
-  preview.innerHTML = filteredLines.map((line,i)=>{
+  preview.innerHTML = filteredLines.map((line,i)=>{ 
     const sc = line.split('\t')[0];
     const isDup = counts[sc]>1;
     const isSelected = i===selectedIndex;
-    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}" data-index="${i}">${escapeHtml(line)}</div>`;
+    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}">${escapeHtml(line)}</div>`;
   }).join('');
 
   let dup=0; for(let k in counts) if(counts[k]>1) dup+=counts[k]-1;
   stats.textContent=`Total Lines: ${lines.length} | Duplicate Shortcuts: ${dup}`;
+
+  updateEditableFields();
 }
 
-// Update Editable Fields
-function updateEditableFields(fromPreview=true){
-    if(selectedIndex>=0 && filteredLines[selectedIndex]){
-        const parts = filteredLines[selectedIndex].split('\t');
-        editShortcut.value = parts[0]||'';
-        editValue.value = parts[1]||'';
-        // scroll only when from preview or arrow
-        const divs = preview.querySelectorAll('div'); 
-        if(fromPreview && divs[selectedIndex]) divs[selectedIndex].scrollIntoView({behavior:'smooth',block:'center'});
-    } else { editShortcut.value=''; editValue.value=''; }
-}
-
-// ------------------- Suggestions -------------------
+// ===== Suggestions =====
 function updateSuggestions(){
   const lines = textArea.value.split('\n');
   const sSet = new Set(), vSet = new Set();
@@ -146,79 +137,57 @@ function updateSuggestions(){
   Array.from(vSet).sort().forEach(v=>{ const opt=document.createElement('option'); opt.value=v; valueList.appendChild(opt); });
 }
 
-// ------------------- File -------------------
-fileInput.addEventListener('change',()=>{
-  const file=fileInput.files[0];
-  if(!file||(!file.name.endsWith('.txt') && !file.name.endsWith('.zip'))) return alert('Please upload a valid .txt or .zip file');
+// ===== File Upload =====
+fileInput.addEventListener('change',()=>{ 
+  const file=fileInput.files[0]; 
+  if(!file) return; 
   const reader=new FileReader();
-  reader.onload=e=>{
-    textArea.value=e.target.result;
-    saveHistory(); updateAll();
-  };
-  reader.readAsText(file);
+
+  if(file.name.endsWith('.txt')){
+      reader.onload=e=>{ textArea.value=e.target.result; updatePreview(); saveHistory(); updateSuggestions(); };
+      reader.readAsText(file);
+  } else if(file.name.endsWith('.zip')){
+      reader.onload = e => {
+          JSZip.loadAsync(e.target.result).then(zip => {
+              const dictFile = zip.file(/dictionary\.txt$/i);
+              if(dictFile && dictFile.length > 0){
+                  dictFile[0].async("string").then(content => {
+                      textArea.value = content;
+                      updatePreview(); saveHistory(); updateSuggestions();
+                  });
+              } else { alert("Zip file-এর মধ্যে dictionary.txt পাওয়া যায়নি!"); }
+          });
+      };
+      reader.readAsArrayBuffer(file);
+  }
 });
 
-// ------------------- TextArea -------------------
-textArea.addEventListener('input',()=>{ saveHistory(); updateAll(false); syncEditableFromTextArea(); updateSuggestions(); });
-textArea.addEventListener('click',syncEditableFromTextArea);
-textArea.addEventListener('keyup',syncEditableFromTextArea);
-
-function syncEditableFromTextArea(){
-    const lines = textArea.value.split('\n'); 
-    const sel = textArea.selectionStart;
-    let charCount = 0; 
-    for(let i=0;i<lines.length;i++){
-        const l=lines[i]+'\n'; 
-        if(sel<=charCount+l.length-1){
-            selectedIndex = filteredLines.indexOf(lines[i]); 
-            updatePreview(); // highlight only, no scroll
-            updateEditableFields(false); 
-            break;
-        } 
-        charCount+=l.length;
-    }
-}
-
-// ------------------- Undo/Redo -------------------
-undoBtn.addEventListener('click',undo);
-redoBtn.addEventListener('click',redo);
-window.addEventListener('keydown',e=>{
-  if(e.ctrlKey && !e.shiftKey && e.key==='z'){ e.preventDefault(); undo(); }
-  else if((e.ctrlKey && e.key==='y')||(e.ctrlKey && e.shiftKey && e.key==='Z')){ e.preventDefault(); redo(); }
-});
-
-// ------------------- Actions -------------------
-function resetText(){ textArea.value=''; updateAll(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); }
+// ===== Actions =====
+function resetText(){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); }
 function refreshPage(){ location.reload(); }
-function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updateAll(); updateSuggestions(); }
-function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true; }).join('\n'); updateAll(); updateSuggestions(); }
-function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updateAll(); updateSuggestions(); }
-function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.value.trim(); if(!sc||!val) return alert('Please enter both shortcut and value.'); textArea.value+=(textArea.value?'\n':'')+`${sc}\t${val}\ten-US\t`; shortcutInput.value=valueInput.value=''; saveHistory(); updateAll(); updateSuggestions(); shortcutInput.focus(); }
+function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true; }).join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
+function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.value.trim(); if(!sc||!val) return alert('Please enter both shortcut and value.'); textArea.value+=(textArea.value?'\n':'')+`${sc}\t${val}\ten-US\t`; shortcutInput.value=valueInput.value=''; updatePreview(); saveHistory(); updateSuggestions(); shortcutInput.focus(); }
 function downloadFile(){ const blob=new Blob([textArea.value],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='edited_document.txt'; a.click(); URL.revokeObjectURL(url); }
+function downloadZip(){ const zip = new JSZip(); zip.file("dictionary.txt", textArea.value); zip.generateAsync({type:"blob"}).then(function(content){ const a=document.createElement('a'); a.href=URL.createObjectURL(content); a.download="edited_document.zip"; a.click(); }); }
 
-function clearFilters(){ shortcutFilter.value=valueFilter.value=''; selectedIndex=-1; updateAll(); updateSuggestions(); }
+// ===== Filters =====
+shortcutFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+valueFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+function clearFilters(){ shortcutFilter.value=valueFilter.value=''; selectedIndex=-1; updatePreview(); updateSuggestions(); }
 
-// ------------------- Live Preview Click -------------------
-preview.addEventListener('click',e=>{
-    const div = e.target.closest('div'); 
-    if(div && div.dataset.index){
-        selectedIndex = parseInt(div.dataset.index); 
-        updatePreview();
-        updateEditableFields(true);
-    }
-});
-
-// ------------------- Arrow Navigation -------------------
-window.addEventListener('keydown',e=>{
-  if(e.key==='ArrowDown' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.min(selectedIndex+1,filteredLines.length-1); updatePreview(); updateEditableFields(true);}
-  if(e.key==='ArrowUp' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.max(selectedIndex-1,0); updatePreview(); updateEditableFields(true);}
-});
-
-// ------------------- Editable Apply -------------------
-applyEditBtn.addEventListener('click',()=>{ applyEdit(); });
-editShortcut.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEdit(); }});
-editValue.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEdit(); }});
-function applyEdit(){
+// ===== Editable Fields =====
+function updateEditableFields(){
+  if(selectedIndex>=0 && filteredLines[selectedIndex]){
+    const parts=filteredLines[selectedIndex].split('\t');
+    editShortcut.value=parts[0]||'';
+    editValue.value=parts[1]||'';
+    // const child=preview.children[selectedIndex];
+    // if(child) child.scrollIntoView({behavior:'smooth',block:'center'});
+  } else { editShortcut.value=''; editValue.value=''; }
+}
+applyEditBtn.addEventListener('click',()=>{
   if(selectedIndex<0) return;
   const lines=textArea.value.split('\n');
   const targetLine=filteredLines[selectedIndex];
@@ -226,15 +195,48 @@ function applyEdit(){
   if(indexInAll<0) return;
   lines[indexInAll]=`${editShortcut.value}\t${editValue.value}\ten-US\t`;
   textArea.value=lines.join('\n');
-  saveHistory();
-  updateAll(); updateSuggestions();
+  updatePreview(); saveHistory(); updateSuggestions();
+});
+editShortcut.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
+editValue.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); }});
+
+// ===== Textarea Sync =====
+function updateEditableFromTextarea(){
+  const cursorPos=textArea.selectionStart;
+  const lines=textArea.value.split('\n'); let cumulative=0, lineIndex=0;
+  for(let i=0;i<lines.length;i++){ cumulative+=lines[i].length+1; if(cursorPos<=cumulative){ lineIndex=i; break; } }
+  const line=lines[lineIndex];
+  const fi=filteredLines.indexOf(line);
+  if(fi>=0) selectedIndex=fi; else { filteredLines=[line]; selectedIndex=0; }
+  updatePreview();
+  updateEditableFields();
+
+  // const child = preview.children[selectedIndex];
+  // if(child) child.scrollIntoView({behavior:'smooth',block:'center'});
 }
+textArea.addEventListener('click',updateEditableFromTextarea);
+textArea.addEventListener('keyup',updateEditableFromTextarea);
 
-// ------------------- Update All -------------------
-function updateAll(fromPreview=true){ updatePreview(); updateEditableFields(fromPreview); }
+// ===== Preview Click =====
+preview.addEventListener('click',e=>{
+  const index = Array.from(preview.children).indexOf(e.target);
+  if(index>=0){ selectedIndex=index; updatePreview(); updateEditableFields(); }
+});
 
-// Initialize
-window.addEventListener('DOMContentLoaded',()=>{ saveHistory(); updateAll(); updateSuggestions(); });
+// ===== Arrow Navigation =====
+window.addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.min(selectedIndex+1,filteredLines.length-1); updatePreview(); }
+  if(e.key==='ArrowUp' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.max(selectedIndex-1,0); updatePreview(); }
+});
+
+// ===== Undo/Redo Shortcuts =====
+window.addEventListener('keydown',e=>{
+  if(e.ctrlKey && !e.shiftKey && e.key==='z'){ e.preventDefault(); undo(); }
+  else if((e.ctrlKey && e.key==='y')||(e.ctrlKey && e.shiftKey && e.key==='Z')){ e.preventDefault(); redo(); }
+});
+
+// ===== Initialize =====
+updatePreview(); updateSuggestions();
 </script>
 </body>
 </html>
