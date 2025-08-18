@@ -1,236 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gboard Dictionary Editor</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; }
-  body { margin:0; padding:20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f7fa; color:#222; min-height:100vh; display:flex; justify-content:center; align-items:flex-start;}
-  .container { width:100%; max-width:960px; background:#fff; border-radius:16px; padding:30px; box-shadow:8px 8px 16px rgba(163,177,198,0.3),-8px -8px 16px #fff; display:flex; flex-direction:column; gap:25px;}
-  h2 { margin:0 0 15px; font-weight:700; color:#111; text-align:center; }
-  #fileInput { padding:12px 16px; font-size:16px; cursor:pointer; width:100%; border:none; border-radius:14px; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  #fileInput:hover { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; }
-  #textArea { width:100%; min-height:180px; font-family:monospace; font-size:15px; padding:16px 20px; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; resize:vertical; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; }
-  #textArea:focus { outline:none; box-shadow:inset 6px 6px 10px #c8d0e7,inset -6px -6px 10px #fff; }
-  .undo-redo-reset, .actions { display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
-  .btn { padding:12px 22px; font-size:14px; font-weight:600; background:linear-gradient(145deg,#e1e7f0,#f9fbff); color:#333; cursor:pointer; user-select:none; min-width:120px; border:none; border-radius:14px; box-shadow:6px 6px 10px rgba(163,177,198,0.25),-6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  .btn:hover { box-shadow: inset 4px 4px 8px #cfd8ef,inset -4px -4px 8px #f6faff; }
-  .input-group { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  .input-group input[type="text"] { flex:0 1 30%; max-width:300px; min-width:150px; padding:10px 14px; font-size:15px; border-radius:14px; border:none; background:#f0f3f7; box-shadow: inset 6px 6px 10px #d1d9e6,inset -6px -6px 10px #fff; transition:box-shadow 0.3s ease; }
-  .input-group input[type="text"]:focus { box-shadow: inset 4px 4px 8px #c2cae1,inset -4px -4px 8px #f5f8ff; outline:none; }
-  #preview { min-height:180px; font-family:monospace; font-size:15px; padding:20px 24px; border-radius:16px; background:#f0f3f7; box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff; white-space:nowrap; overflow-y:auto; text-overflow:ellipsis; max-height:300px; color:#222;}
-  .highlight { background-color:#fff7cc; border-radius:6px; font-weight:700; padding:0 6px; color:#bfa31d; }
-  @media (max-width:720px){ body{padding:15px 10px; align-items:center;} .container{padding:20px 16px; max-width:100%; width:100%; border-radius:12px; box-shadow:6px 6px 12px rgba(163,177,198,0.25),-6px -6px 12px #fff;} #fileInput{font-size:14px;padding:10px 14px;} #textArea{font-size:14px; padding:14px 16px; min-height:140px;} .btn{font-size:13px;padding:10px 18px; min-width:100px; flex:1 1 auto; box-shadow:5px 5px 10px rgba(163,177,198,0.2),-5px -5px 10px #fff;} .undo-redo,.actions{gap:12px; justify-content:space-evenly;} .input-group{flex-direction:column; gap:10px; align-items:stretch;} .input-group input[type="text"]{flex:unset;width:100%;min-width:0;font-size:14px;padding:10px 14px;} .input-group button.btn{width:100%;height:40px;padding:10px 14px;font-size:14px;align-self:stretch;} #preview{font-size:14px;padding:16px 18px; max-height:240px; min-height:140px;} }
+body{margin:0;padding:20px;font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#222;}
+.container{max-width:960px;margin:auto;background:#fff;padding:25px;border-radius:16px;box-shadow:8px 8px 20px rgba(163,177,198,0.3),-8px -8px 20px #fff;display:flex;flex-direction:column;gap:20px;}
+h2{text-align:center;margin:0 0 15px;}
+#fileInput{padding:12px 16px;font-size:16px;border:none;border-radius:14px;background:#e1e7f0;cursor:pointer;box-shadow: inset 6px 6px 10px #cfd8ef,inset -6px -6px 10px #fff;}
+#textArea{width:100%;min-height:200px;font-family:'Fira Code',monospace;font-size:15px;padding:16px 20px;border-radius:16px;background:#e6ebf1;box-shadow:8px 8px 20px rgba(163,177,198,0.25),-8px -8px 20px #fff;resize:vertical;overflow-y:auto;color:#222;}
+#textArea:focus{outline:none;box-shadow: inset 6px 6px 12px #cfd8ef,inset -6px -6px 12px #fff;}
+.btn{padding:10px 18px;font-size:14px;border:none;border-radius:14px;background:linear-gradient(145deg,#e1e7f0,#f9fbff);cursor:pointer;min-width:100px;box-shadow:6px 6px 12px rgba(163,177,198,0.25),-6px -6px 12px #fff;margin:2px;}
+.btn:hover{box-shadow: inset 4px 4px 8px #cfd8ef,inset -4px -4px 8px #f6faff;}
+.actions, .undo-redo-reset, .input-group{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.input-group input[type="text"]{padding:10px 14px;border-radius:14px;border:none;background:#e6ebf1;box-shadow: inset 6px 6px 12px #cfd8ef,inset -6px -6px 12px #fff;flex:1 1 150px;min-width:150px;font-size:15px;}
+#preview{min-height:200px;padding:20px;border-radius:16px;background:#e6ebf1;box-shadow:8px 8px 16px rgba(163,177,198,0.25),-8px -8px 16px #fff;overflow-y:auto;white-space:nowrap;max-height:300px;color:#222;}
+.highlight{background-color:#fff7cc;border-radius:6px;font-weight:700;padding:0 6px;color:#bfa31d;}
+@media(max-width:720px){.container{padding:20px 16px;}#fileInput{font-size:14px;padding:10px 14px;}#textArea{font-size:14px;padding:14px 16px;min-height:140px;} .btn{font-size:13px;flex:1 1 auto;min-width:unset;} .input-group input[type="text"]{font-size:14px;padding:10px 14px;flex:1 1 100%;}}
 </style>
 </head>
 <body>
 <div class="container">
-  <h2>📂 Gboard Dictionary Editor</h2>
-  <input type="file" id="fileInput" accept=".txt,.zip" />
-  <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
+<h2>📂 Gboard Dictionary Editor</h2>
+<input type="file" id="fileInput" accept=".txt,.zip">
+<textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
 
-  <div class="undo-redo-reset">
-    <button class="btn" id="undoBtn">↩ Undo</button>
-    <button class="btn" id="redoBtn">↪ Redo</button>
-    <button class="btn" onclick="resetText()">🧹 Reset</button>
-    <button class="btn" onclick="refreshPage()">🔄 Refresh</button>
-  </div>
-
-  <div class="actions">
-    <button class="btn" onclick="sortLines()">🔤 Sort</button>
-    <button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
-    <button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
-    <button class="btn" onclick="downloadFile()">⬇ Download TXT</button>
-    <button class="btn" onclick="downloadZip()">📦 Download ZIP</button>
-  </div>
-
-  <div class="input-group">
-    <input type="text" id="shortcutInput" placeholder="Shortcut" list="shortcutSuggestions" />
-    <input type="text" id="valueInput" placeholder="Value" list="valueSuggestions" />
-    <button class="btn" onclick="addEntry()">➕ Add</button>
-  </div>
-
-  <div class="input-group">
-    <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." list="shortcutSuggestions" />
-    <input type="text" id="valueFilter" placeholder="🔍 Value..." list="valueSuggestions" />
-  </div>
-
-  <button class="btn" onclick="clearFilters()">❌ Clear Filters</button>
-
-  <h3>📝 Final Preview</h3>
-  <div id="preview"></div>
-  <div id="stats"></div>
-
-  <datalist id="shortcutSuggestions"></datalist>
-  <datalist id="valueSuggestions"></datalist>
-
-  <div class="input-group">
-    <input type="text" id="editShortcut" placeholder="Edit Shortcut">
-    <input type="text" id="editValue" placeholder="Edit Value">
-    <button class="btn" id="applyEditBtn">Apply Edit</button>
-  </div>
+<div class="undo-redo-reset">
+<button class="btn" id="undoBtn">↩ Undo</button>
+<button class="btn" id="redoBtn">↪ Redo</button>
+<button class="btn" onclick="resetText()">🧹 Reset</button>
+<button class="btn" onclick="refreshPage()">🔄 Refresh</button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<div class="actions">
+<button class="btn" onclick="sortLines()">🔤 Sort</button>
+<button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
+<button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
+<button class="btn" onclick="downloadFile()">⬇ Download TXT</button>
+<button class="btn" onclick="downloadZip()">⬇ Download ZIP</button>
+</div>
+
+<div class="input-group">
+<input type="text" id="shortcutInput" placeholder="Shortcut" list="shortcutSuggestions">
+<input type="text" id="valueInput" placeholder="Value" list="valueSuggestions">
+<button class="btn" onclick="addEntry()">➕ Add</button>
+</div>
+
+<div class="input-group">
+<input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." list="shortcutSuggestions">
+<input type="text" id="valueFilter" placeholder="🔍 Value..." list="valueSuggestions">
+</div>
+<button class="btn" onclick="clearFilters()">❌ Clear Filters</button>
+
+<h3>📝 Final Preview</h3>
+<div id="preview"></div>
+<div id="stats"></div>
+
+<datalist id="shortcutSuggestions"></datalist>
+<datalist id="valueSuggestions"></datalist>
+
+<div class="input-group">
+<input type="text" id="editShortcut" placeholder="Edit Shortcut">
+<input type="text" id="editValue" placeholder="Edit Value">
+<button class="btn" id="applyEditBtn">Apply Edit</button>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-const fileInput = document.getElementById('fileInput');
-const textArea = document.getElementById('textArea');
-const preview = document.getElementById('preview');
-const shortcutInput = document.getElementById('shortcutInput');
-const valueInput = document.getElementById('valueInput');
-const undoBtn = document.getElementById('undoBtn');
-const redoBtn = document.getElementById('redoBtn');
-const shortcutFilter = document.getElementById('shortcutFilter');
-const valueFilter = document.getElementById('valueFilter');
-const editShortcut = document.getElementById('editShortcut');
-const editValue = document.getElementById('editValue');
-const applyEditBtn = document.getElementById('applyEditBtn');
-const stats = document.getElementById('stats');
+const fileInput=document.getElementById('fileInput');
+const textArea=document.getElementById('textArea');
+const preview=document.getElementById('preview');
+const shortcutInput=document.getElementById('shortcutInput');
+const valueInput=document.getElementById('valueInput');
+const undoBtn=document.getElementById('undoBtn');
+const redoBtn=document.getElementById('redoBtn');
+const shortcutFilter=document.getElementById('shortcutFilter');
+const valueFilter=document.getElementById('valueFilter');
+const editShortcut=document.getElementById('editShortcut');
+const editValue=document.getElementById('editValue');
+const applyEditBtn=document.getElementById('applyEditBtn');
+const stats=document.getElementById('stats');
 
-let history=[], historyIndex=-1, isUndoRedoAction=false;
-let filteredLines=[], selectedIndex=-1;
+let history=[],historyIndex=-1,isUndoRedoAction=false;
+let filteredLines=[],selectedIndex=-1;
 
-// ------------------- History -------------------
-function saveHistory(){ if(isUndoRedoAction)return; if(historyIndex<history.length-1)history=history.slice(0,historyIndex+1); history.push(textArea.value); historyIndex++; if(history.length>50){history.shift(); historyIndex--;} updateUndoRedoButtons(); }
-function updateUndoRedoButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1; }
-function undo(){ if(historyIndex>0){ isUndoRedoAction=true; textArea.value=history[--historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
-function redo(){ if(historyIndex<history.length-1){ isUndoRedoAction=true; textArea.value=history[++historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons(); }}
+// ---------------- History ----------------
+function saveHistory(){ if(isUndoRedoAction)return; if(historyIndex<history.length-1)history=history.slice(0,historyIndex+1); history.push(textArea.value); historyIndex++; if(history.length>50){history.shift(); historyIndex--;} updateUndoRedoButtons();}
+function updateUndoRedoButtons(){ undoBtn.disabled=historyIndex<=0; redoBtn.disabled=historyIndex>=history.length-1;}
+function undo(){ if(historyIndex>0){ isUndoRedoAction=true; textArea.value=history[--historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons();}}
+function redo(){ if(historyIndex<history.length-1){ isUndoRedoAction=true; textArea.value=history[++historyIndex]; updatePreview(); isUndoRedoAction=false; updateUndoRedoButtons();}}
 
-// ------------------- Escape -------------------
+// ---------------- Escape ----------------
 function escapeHtml(text){ return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ------------------- Preview -------------------
+// ---------------- Preview ----------------
 function updatePreview(){
-  const lines = textArea.value.split('\n');
-  const counts = {};
-  lines.forEach(line=>{ const sc=line.split('\t')[0]; if(sc) counts[sc]=(counts[sc]||0)+1; });
-
-  const sFilter = shortcutFilter.value.toLowerCase();
-  const vFilter = valueFilter.value.toLowerCase();
-  filteredLines = lines.filter(line=>{ const parts=line.split('\t'); return parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter); });
-
-  preview.innerHTML = filteredLines.map((line,i)=>{
-    const sc=line.split('\t')[0];
-    const isDup=counts[sc]>1;
-    const isSelected=i===selectedIndex;
-    return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}" id="line-${i}">${escapeHtml(line)}</div>`;
-  }).join('');
-
-  if(selectedIndex>=0){
-    const el=document.getElementById(`line-${selectedIndex}`);
-    if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
-  }
-
-  let dup=0; for(let k in counts) if(counts[k]>1) dup+=counts[k]-1;
-  stats.textContent=`Total Lines: ${lines.length} | Duplicate Shortcuts: ${dup}`;
-
-  if(selectedIndex>=0 && filteredLines[selectedIndex]){
-    const parts=filteredLines[selectedIndex].split('\t');
-    editShortcut.value=parts[0]||''; editValue.value=parts[1]||'';
-  } else { editShortcut.value=''; editValue.value=''; }
+const lines=textArea.value.split('\n');
+const counts={};
+lines.forEach(line=>{ const sc=line.split('\t')[0]; if(sc) counts[sc]=(counts[sc]||0)+1; });
+const sFilter=shortcutFilter.value.toLowerCase();
+const vFilter=valueFilter.value.toLowerCase();
+filteredLines=lines.filter(line=>{ const parts=line.split('\t'); return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter)); });
+preview.innerHTML=filteredLines.map((line,i)=>{
+const sc=line.split('\t')[0]; const isDup=counts[sc]>1; const isSelected=i===selectedIndex;
+return `<div class="${isDup?'highlight':''}" style="${isSelected?'background:#a8d0ff':''}">${escapeHtml(line)}</div>`;}).join('');
+let dup=0; for(let k in counts) if(counts[k]>1) dup+=counts[k]-1; stats.textContent=`Total Lines: ${lines.length} | Duplicate Shortcuts: ${dup}`;
+updateEditableFields();
 }
 
-// ------------------- Suggestions -------------------
-function updateSuggestions(){
-  const lines=textArea.value.split('\n');
-  const sSet=new Set(),vSet=new Set();
-  lines.forEach(line=>{ const p=line.split('\t'); if(p[0]) sSet.add(p[0].trim()); if(p[1]) vSet.add(p[1].trim()); });
-  const shortcutList=document.getElementById('shortcutSuggestions');
-  const valueList=document.getElementById('valueSuggestions');
-  shortcutList.innerHTML=''; valueList.innerHTML='';
-  Array.from(sSet).sort().forEach(s=>{ const opt=document.createElement('option'); opt.value=s; shortcutList.appendChild(opt); });
-  Array.from(vSet).sort().forEach(v=>{ const opt=document.createElement('option'); opt.value=v; valueList.appendChild(opt); });
+// ---------------- Editable Update ----------------
+function updateEditableFields(){
+if(selectedIndex>=0 && filteredLines[selectedIndex]){
+const parts=filteredLines[selectedIndex].split('\t');
+editShortcut.value=parts[0]||''; editValue.value=parts[1]||'';
+const divs=preview.querySelectorAll('div'); if(divs[selectedIndex]) divs[selectedIndex].scrollIntoView({behavior:'smooth',block:'center'});}
+else{editShortcut.value=''; editValue.value='';}
 }
 
-// ------------------- File Upload -------------------
-fileInput.addEventListener('change', async ()=>{
-  const file=fileInput.files[0];
-  if(!file) return;
+// ---------------- Suggestions ----------------
+function updateSuggestions(){ const lines=textArea.value.split('\n'); const sSet=new Set(),vSet=new Set(); lines.forEach(line=>{ const p=line.split('\t'); if(p[0]) sSet.add(p[0].trim()); if(p[1]) vSet.add(p[1].trim()); });
+const shortcutList=document.getElementById('shortcutSuggestions'); const valueList=document.getElementById('valueSuggestions'); shortcutList.innerHTML=''; valueList.innerHTML='';
+Array.from(sSet).sort().forEach(s=>{ const opt=document.createElement('option'); opt.value=s; shortcutList.appendChild(opt); });
+Array.from(vSet).sort().forEach(v=>{ const opt=document.createElement('option'); opt.value=v; valueList.appendChild(opt); });}
 
-  if(file.name.endsWith('.txt')){
-    const reader=new FileReader();
-    reader.onload=e=>{ textArea.value=e.target.result; updatePreview(); saveHistory(); updateSuggestions(); };
-    reader.readAsText(file);
-  } else if(file.name.endsWith('.zip')){
-    const zip=await JSZip.loadAsync(file);
-    const txtFileName=Object.keys(zip.files).find(name=>name.endsWith('dictionary.txt'));
-    if(!txtFileName) return alert('Zip এর মধ্যে dictionary.txt নেই');
-    const content=await zip.files[txtFileName].async('string');
-    textArea.value=content;
-    updatePreview(); saveHistory(); updateSuggestions();
-  } else { alert('Please upload a valid .txt or .zip file'); }
-});
+// ---------------- File ----------------
+fileInput.addEventListener('change',()=>{ const file=fileInput.files[0]; if(!file||(!file.name.endsWith('.txt')&&!file.name.endsWith('.zip'))) return alert('Please upload a valid .txt or .zip file'); const reader=new FileReader(); reader.onload=e=>{ textArea.value=e.target.result; updatePreview(); saveHistory(); updateSuggestions(); }; reader.readAsText(file); });
 
-// ------------------- TextArea -------------------
+// ---------------- TextArea ----------------
 textArea.addEventListener('input',()=>{ updatePreview(); saveHistory(); updateSuggestions(); });
+textArea.addEventListener('click',()=>{ syncEditableFromTextArea(); });
+textArea.addEventListener('keyup',()=>{ syncEditableFromTextArea(); });
 
-// ------------------- Undo/Redo -------------------
+function syncEditableFromTextArea(){
+const lines=textArea.value.split('\n'); const sel=textArea.selectionStart;
+let charCount=0; for(let i=0;i<lines.length;i++){ const l=lines[i]+'\n'; if(sel<=charCount+l.length-1){ selectedIndex=filteredLines.indexOf(lines[i]); updatePreview(); break;} charCount+=l.length;}}
+
+// ---------------- Undo/Redo ----------------
 undoBtn.addEventListener('click',undo);
 redoBtn.addEventListener('click',redo);
-window.addEventListener('keydown',e=>{
-  if(e.ctrlKey && !e.shiftKey && e.key==='z'){ e.preventDefault(); undo(); }
-  else if((e.ctrlKey && e.key==='y')||(e.ctrlKey && e.shiftKey && e.key==='Z')){ e.preventDefault(); redo(); }
-});
+window.addEventListener('keydown',e=>{ if(e.ctrlKey && !e.shiftKey && e.key==='z'){ e.preventDefault(); undo(); } else if((e.ctrlKey && e.key==='y')||(e.ctrlKey && e.shiftKey && e.key==='Z')){ e.preventDefault(); redo(); } });
 
-// ------------------- Actions -------------------
-function resetText(){ if(confirm("আপনি কি সত্যিই সব ডিলিট করতে চান?")){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus(); } }
-function refreshPage(){ if(confirm("আপনি কি সত্যিই পেজ রিফ্রেশ করতে চান?")) location.reload(); }
-function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
-function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true; }).join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
-function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updatePreview(); saveHistory(); updateSuggestions(); }
-function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.value.trim(); if(!sc||!val) return alert('Please enter both shortcut and value.'); textArea.value+=(textArea.value?'\n':'')+`${sc}\t${val}\ten-US\t`; shortcutInput.value=valueInput.value=''; updatePreview(); saveHistory(); updateSuggestions(); shortcutInput.focus(); }
-function downloadFile(){ const blob=new Blob([textArea.value],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='edited_document.txt'; a.click(); URL.revokeObjectURL(url); }
+// ---------------- Actions ----------------
+function resetText(){ textArea.value=''; updatePreview(); shortcutInput.value=valueInput.value=''; shortcutInput.focus();}
+function refreshPage(){location.reload();}
+function removeEmptyLines(){ textArea.value=textArea.value.split('\n').filter(l=>l.trim()!=='').join('\n'); updatePreview(); saveHistory(); updateSuggestions();}
+function removeDuplicates(){ const seen=new Set(); textArea.value=textArea.value.split('\n').filter(l=>{ const sc=l.split('\t')[0]; if(seen.has(sc)) return false; seen.add(sc); return true;}).join('\n'); updatePreview(); saveHistory(); updateSuggestions();}
+function sortLines(){ const lines=textArea.value.split('\n'); const comments=lines.filter(l=>l.trim().startsWith('#')); const normal=lines.filter(l=>!l.trim().startsWith('#')); normal.sort((a,b)=>a.localeCompare(b)); textArea.value=[...comments,...normal].join('\n'); updatePreview(); saveHistory(); updateSuggestions();}
+function addEntry(){ const sc=shortcutInput.value.trim(); const val=valueInput.value.trim(); if(!sc||!val) return alert('Please enter both shortcut and value.'); textArea.value+=(textArea.value?'\n':'')+`${sc}\t${val}\ten-US\t`; shortcutInput.value=valueInput.value=''; updatePreview(); saveHistory(); updateSuggestions(); shortcutInput.focus();}
+function downloadFile(){ const blob=new Blob([textArea.value],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='edited_document.txt'; a.click(); URL.revokeObjectURL(url);}
+function downloadZip(){ const zip=new JSZip(); zip.file("edited_document.txt",textArea.value); zip.generateAsync({type:"blob"}).then(function(content){ const a=document.createElement('a'); a.href=URL.createObjectURL(content); a.download="edited_document.zip"; a.click(); URL.revokeObjectURL(a.href);});}
 
-// ------------------- ZIP Download -------------------
-async function downloadZip(){
-  const zip = new JSZip();
-  zip.file("dictionary.txt", textArea.value);
-  const content = await zip.generateAsync({type:"blob"});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(content);
-  a.download = "edited_document.zip";
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-// ------------------- Filters -------------------
-shortcutFilter.addEventListener('input',()=>{ selectedIndex=0; updatePreview(); updateSuggestions(); });
-valueFilter.addEventListener('input',()=>{ selectedIndex=0; updatePreview(); updateSuggestions(); });
+// ---------------- Filters ----------------
+shortcutFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
+valueFilter.addEventListener('input',()=>{ selectedIndex=-1; updatePreview(); updateSuggestions(); });
 function clearFilters(){ shortcutFilter.value=valueFilter.value=''; selectedIndex=-1; updatePreview(); updateSuggestions(); }
 
-// ------------------- TextArea Click -------------------
-textArea.addEventListener('click',()=>{
-  const cursor=textArea.selectionStart;
-  const lines=textArea.value.split('\n'); let cumulative=0,clicked=-1;
-  for(let i=0;i<lines.length;i++){ cumulative+=lines[i].length+1; if(cursor<=cumulative){clicked=i; break;} }
-  if(clicked>=0){ const clickedLine=lines[clicked]; const fi=filteredLines.indexOf(clickedLine); selectedIndex=(fi>=0)?fi:0; updatePreview(); }
+// ---------------- Preview Click ----------------
+preview.addEventListener('click',e=>{
+  if(!e.target || e.target.tagName!=='DIV') return;
+  const clickedLine=e.target.textContent;
+  const fi=filteredLines.indexOf(clickedLine);
+  if(fi>=0) selectedIndex=fi;
+  updatePreview();
 });
 
-// ------------------- Arrow Navigation -------------------
+// ---------------- Arrow Navigation ----------------
 window.addEventListener('keydown',e=>{
   if(e.key==='ArrowDown' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.min(selectedIndex+1,filteredLines.length-1); updatePreview(); }
   if(e.key==='ArrowUp' && filteredLines.length>0){ e.preventDefault(); selectedIndex=Math.max(selectedIndex-1,0); updatePreview(); }
 });
 
-// ------------------- Editable Filter Apply -------------------
-applyEditBtn.addEventListener('click',()=>{
-  if(selectedIndex<0) return;
-  const lines=textArea.value.split('\n');
-  const targetLine=filteredLines[selectedIndex];
-  const indexInAll=lines.indexOf(targetLine);
-  if(indexInAll<0) return;
-  const parts=lines[indexInAll].split('\t');
-  parts[0]=editShortcut.value; parts[1]=editValue.value;
-  lines[indexInAll]=parts.join('\t');
-  textArea.value=lines.join('\n'); updatePreview(); saveHistory(); updateSuggestions();
-});
+// ---------------- Editable ----------------
+applyEditBtn.addEventListener('click',()=>{ applyEdit(); });
+[editShortcut,editValue].forEach(input=>{ input.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyEdit(); } }); });
 
-editShortcut.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); } });
-editValue.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyEditBtn.click(); } });
-
-// Initialize
-updatePreview(); saveHistory(); updateSuggestions();
+function applyEdit(){
+if(selectedIndex<0) return;
+const lines=textArea.value.split('\n');
+const targetLine=filteredLines[selectedIndex];
+const indexInTextArea=lines.indexOf(targetLine);
+if(indexInTextArea>=0){
+lines[indexInTextArea]=`${editShortcut.value}\t${editValue.value}\ten-US\t`;
+textArea.value=lines.join('\n'); updatePreview(); saveHistory(); updateSuggestions();
+}}
 </script>
 </body>
 </html>
