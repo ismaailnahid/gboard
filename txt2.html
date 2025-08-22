@@ -207,7 +207,8 @@ input[type="text"]:focus { background: var(--input-focus); outline: none; }
   <span id="fileName">No file chosen</span>
 </div>
 
-  <textarea id="textArea" placeholder="Your file content will appear here..."></textarea>
+<textarea id="textArea" placeholder="Your file content will appear here..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+
 
   <div class="undo-redo-reset">
     <button class="btn" id="undoBtn">↩ Undo</button>
@@ -503,3 +504,4 @@ function formatForGboard(){
 </script>
 </body>
 </html>
+
