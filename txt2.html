@@ -222,6 +222,8 @@ input[type="text"]:focus { background: var(--input-focus); outline: none; }
     <button class="btn" onclick="removeEmptyLines()">🧽 Remove Spa</button>
     <button class="btn" onclick="removeDuplicates()">🗃️ Remove Dup</button>
     <button class="btn" onclick="removeExtraSpaces()">🧹 Clean Spaces/Tabs</button>
+<button class="btn" onclick="formatForGboard()">✨ Format for Gboard</button>
+<button class="btn" onclick="formatForGboard(true)">✨ Format & Remove Duplicates</button>
 
     <button class="btn" onclick="downloadFile()">⬇ Download TXT</button>
     <button class="btn" onclick="downloadZip()">⬇ Download ZIP</button>
@@ -462,6 +464,45 @@ window.addEventListener('keydown',e=>{
 
 updatePreview(); updateSuggestions();
 
+function formatForGboard(removeDuplicatesFlag = false){
+  let lines = textArea.value.split('\n').map(line => line.trim());
+
+  // clean each line: shortcut and value
+  lines = lines.map(line => {
+    const parts = line.split('\t').map(p => p.trim());
+    // ensure at least 3 columns: shortcut, value, en-US
+    while(parts.length < 3) parts.push('');
+    return `${parts[0]}\t${parts[1]}\t${parts[2]}`;
+  });
+
+  // remove empty lines
+  lines = lines.filter(line => line.split('\t')[0] !== '');
+
+  // remove duplicates if needed
+  if(removeDuplicatesFlag){
+    const seen = new Set();
+    lines = lines.filter(line => {
+      const sc = line.split('\t')[0];
+      if(seen.has(sc)) return false;
+      seen.add(sc);
+      return true;
+    });
+  }
+
+  // sort lines by shortcut
+  const comments = lines.filter(l => l.startsWith('#'));
+  const normal = lines.filter(l => !l.startsWith('#'));
+  normal.sort((a,b)=>a.localeCompare(b));
+  lines = [...comments, ...normal];
+
+  // update textarea
+  textArea.value = lines.join('\n');
+  updatePreview();
+  saveHistory();
+  updateSuggestions();
+
+  alert("Gboard format applied!");
+}
 
 </script>
 </body>
