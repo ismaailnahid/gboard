@@ -213,10 +213,11 @@
         @media (max-width: 480px) {
             .container {
                 padding: 16px 12px;
+            
             }
 
             h2 {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
 
             textarea,
@@ -228,8 +229,19 @@
             .btn {
                 font-size: 13px;
                 padding: 8px 12px;
-                width: 100%;
+                width: auto;
             }
+
+
+
+    #preview {
+
+margin-top: 10px;
+   
+        }
+
+
+
         }
 
         #preview .shortcut[data-prefix="a"] {
@@ -311,7 +323,7 @@
             <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." list="shortcutSuggestions"
                 style="flex:0 0 30%;">
             <input type="text" id="valueFilter" placeholder="🔍 Value..." list="valueSuggestions" style="flex:1;">
-            <button class="btn" onclick="clearFilters()" style="flex:0 0 auto;">Clear Filters</button>
+            <button class="btn" onclick="clearFilters()" style="flex:0 0 auto;">Filter ❌</button>
         </div>
 
         <!-- Preview Section -->
