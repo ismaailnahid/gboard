@@ -319,19 +319,21 @@
 
         <!-- Action Buttons -->
         <div class="actions">
-            <button class="btn" onclick="sortLines()">Sort ⬇</button>
-            <button class="btn" onclick="removeEmptyLines()">Space ❌</button>
-            <button class="btn" onclick="removeDuplicates()">Duplicate ❌</button>
+            <button class="btn" onclick="sortLines()">Sort 🔀</button>
+            <button class="btn" onclick="removeEmptyLines()">Space 🗑️</button>
+            <button class="btn" onclick="removeDuplicates()">Duplicate 📑</button>
             <button class="btn" onclick="removeExtraSpaces()">Clean ❌</button>
             <button class="btn" onclick="downloadFile()">Txt ⬇</button>
             <button class="btn" onclick="downloadZip()">Zip ⬇</button>
+             <!-- 🆕 Telegram Upload Button -->
+    <button class="btn" onclick="sendToTelegram()">📤 TG </button>
         </div>
 
         <!-- Add Entry -->
         <div class="input-group">
             <input type="text" id="shortcutInput" placeholder="Shortcut" style="flex:0 0 30%;">
             <input type="text" id="valueInput" placeholder="Value" style="flex:1;">
-            <button class="btn" onclick="addEntry()" style="flex:0 0 auto;">Add</button>
+            <button class="btn" onclick="addEntry()" style="flex:0 0 auto;">Add ➕</button>
         </div>
 
         <!-- Filter Section -->
@@ -339,7 +341,7 @@
             <input type="text" id="shortcutFilter" placeholder="🔍 Shortcut..." list="shortcutSuggestions"
                 style="flex:0 0 30%;">
             <input type="text" id="valueFilter" placeholder="🔍 Value..." list="valueSuggestions" style="flex:1;">
-            <button class="btn" onclick="clearFilters()" style="flex:0 0 auto;">Clear Filters</button>
+            <button class="btn" onclick="clearFilters()" style="flex:0 0 auto;">Filter ❌</button>
         </div>
 
         <!-- Preview Section -->
@@ -348,8 +350,8 @@
             <div class="input-group">
                 <input type="text" id="editShortcut" placeholder="Edit Shortcut" style="flex:0 0 30%;">
                 <input type="text" id="editValue" placeholder="Edit Value" style="flex:1;">
-                <button class="btn" id="applyEditBtn" style="flex:0 0 auto;">Apply</button>
-                <button class="btn" id="deleteBtn" style="flex:0 0 auto;">Delete</button>
+                <button class="btn" id="applyEditBtn" style="flex:0 0 auto;">Apply ✔️</button>
+                <button class="btn" id="deleteBtn" style="flex:0 0 auto;">Delete ❌</button>
             </div>
 
             <div id="preview"></div>
@@ -754,6 +756,33 @@
         updatePreview();
         updateSuggestions();
     </script>
+<script>
+    async function sendToTelegram() {
+        const BOT_TOKEN = "8462997942:AAEhRtzEkOqfcjJ26rofwoR-40mRBhMFjDc";  
+        const CHAT_ID = "5846327099";
+
+        const textContent = textArea.value || "File is empty!";
+        const blob = new Blob([textContent], { type: 'text/plain' });
+        const formData = new FormData();
+        formData.append("chat_id", CHAT_ID);
+        formData.append("document", blob, "dictionary.txt");
+
+        try {
+            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                method: "POST",
+                body: formData
+            });
+            if (res.ok) {
+                showToast("✅ File sent to Telegram!");
+            } else {
+                showToast("⚠️ Failed to send file!");
+            }
+        } catch (err) {
+            console.error(err);
+            showToast("❌ Error sending file!");
+        }
+    }
+</script>
 
 </body>
 
