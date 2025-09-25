@@ -749,6 +749,12 @@ function clearFilters() {
             }
         });
 
+
+
+        textArea.addEventListener('click', updateEditableFromTextarea);
+textArea.addEventListener('keyup', updateEditableFromTextarea);
+textArea.addEventListener('input', updateEditableFromTextarea);
+
         // -----------------------------
         // Arrow Navigation
         // -----------------------------
@@ -821,19 +827,30 @@ window.addEventListener('keydown', e => {
             span.addEventListener("click", () => jumpToLetter(letter.toLowerCase()));
             alphabetBar.appendChild(span);
         });
+function jumpToLetter(letter) {
+    // প্রথমে আগের সিলেক্টেড লাইন থেকে 'selected' ক্লাস সরাও
+    Array.from(preview.children).forEach(div => div.classList.remove("selected"));
 
-        function jumpToLetter(letter) {
-            for (let i = 0; i < preview.children.length; i++) {
-                const sc = preview.children[i].querySelector(".shortcut")?.textContent.toLowerCase();
-                if (sc && sc.startsWith(letter)) {
-                    preview.scrollTo({ top: preview.children[i].offsetTop - preview.offsetTop, behavior: "smooth" });
-                    preview.children[i].classList.add("selected");
-                    selectedIndex = i;
-                    updateEditableFields();
-                    break;
-                }
-            }
+    for (let i = 0; i < preview.children.length; i++) {
+        const sc = preview.children[i].querySelector(".shortcut")?.textContent.toLowerCase();
+        if (sc && sc.startsWith(letter)) {
+            // নির্বাচিত লাইনে স্ক্রল
+            preview.scrollTo({ 
+                top: preview.children[i].offsetTop - preview.offsetTop, 
+                behavior: "smooth" 
+            });
+
+            // সিলেক্টেড ক্লাস যোগ
+            preview.children[i].classList.add("selected");
+
+            // selectedIndex আপডেট
+            selectedIndex = i;
+            updateEditableFields();
+            break;
         }
+    }
+}
+
 
         // -----------------------------
         // Initial Load
