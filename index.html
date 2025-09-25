@@ -264,51 +264,54 @@
 
         }
 
+        #alphabetBar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 8px;
+            background: #eef2f7;
+            border-radius: 6px;
+        }
+
+        #alphabetBar span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #46526b;
+            cursor: pointer;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        #alphabetBar span:hover {
+            color: #1742a0;
+            transform: scale(1.2);
+        }
+
+        @media (max-width: 600px) {
             #alphabetBar {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 6px;
-                margin-top: 10px;
-                padding: 8px;
-                background: #eef2f7;
-                border-radius: 6px;
+                gap: 4px;
+                padding: 6px;
             }
 
             #alphabetBar span {
-                font-size: 13px;
-                font-weight: 600;
-                color: #46526b;
-                cursor: pointer;
-                transition: 0.2s;
-                user-select: none;
+                font-size: 11px;
             }
+        }
 
-            #alphabetBar span:hover {
-                color: #1742a0;
-                transform: scale(1.2);
-            }
-
-            @media (max-width: 600px) {
-                #alphabetBar {
-                    gap: 4px;
-                    padding: 6px;
-                }
-
-                #alphabetBar span {
-                    font-size: 11px;
-                }
-            }
         .new-entry {
-            color: #000000 !important; /* dark yellow */
-    background-color: #07ff77 !important; /* light green */
-}
+            color: #000000 !important;
+            /* dark yellow */
+            background-color: #07ff77 !important;
+            /* light green */
+        }
 
-.edited-entry {
-    color: gold;
-    background-color: #ff0015 !important; /* light red */
-}
-
+        .edited-entry {
+            color: gold;
+            background-color: #ff0015 !important;
+            /* light red */
+        }
     </style>
 </head>
 
@@ -334,9 +337,9 @@
             <button class="btn" onclick="removeExtraSpaces()">Clean ❌</button>
             <button class="btn" onclick="downloadFile()">Txt ⬇</button>
             <button class="btn" onclick="downloadZip()">Zip ⬇</button>
-             <!-- 🆕 Telegram Upload Button -->
-    <button class="btn" onclick="sendToTelegram()">📤 TG </button>
-    <button class="btn" onclick="goToLastChange()">🟢 Last Change</button>
+            <!-- 🆕 Telegram Upload Button -->
+            <button class="btn" onclick="sendToTelegram()">📤 TG </button>
+            <button class="btn" onclick="goToLastChange()">🟢 Last Change</button>
         </div>
 
         <!-- Add Entry -->
@@ -374,6 +377,10 @@
     </div>
 
     <div id="toast"></div>
+    <footer style="text-align:center; margin-top:20px; color:#555; font-size:0.9rem;">
+        Last updated: 26 Sep 2025, 03:45 AM
+    </footer>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
@@ -417,46 +424,46 @@
         // -----------------------------
         // Preview Update
         // -----------------------------
-function updatePreview() {
-    const lines = textArea.value.split('\n');
-    const counts = {};
-    lines.forEach(line => {
-        const sc = line.split('\t')[0];
-        if (sc) counts[sc] = (counts[sc] || 0) + 1;
-    });
+        function updatePreview() {
+            const lines = textArea.value.split('\n');
+            const counts = {};
+            lines.forEach(line => {
+                const sc = line.split('\t')[0];
+                if (sc) counts[sc] = (counts[sc] || 0) + 1;
+            });
 
-    const sFilter = shortcutFilter.value.toLowerCase();
-    const vFilter = valueFilter.value.toLowerCase();
-    filteredLines = lines.filter(line => {
-        const parts = line.split('\t');
-        return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
-    });
+            const sFilter = shortcutFilter.value.toLowerCase();
+            const vFilter = valueFilter.value.toLowerCase();
+            filteredLines = lines.filter(line => {
+                const parts = line.split('\t');
+                return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
+            });
 
-    // Store previous classes
-    const prevClasses = [];
-    Array.from(preview.children).forEach(div => {
-        prevClasses.push({
-            sc: div.querySelector(".shortcut")?.textContent,
-            cls: div.className
-        });
-    });
+            // Store previous classes
+            const prevClasses = [];
+            Array.from(preview.children).forEach(div => {
+                prevClasses.push({
+                    sc: div.querySelector(".shortcut")?.textContent,
+                    cls: div.className
+                });
+            });
 
-    preview.innerHTML = filteredLines.map((line, i) => {
-        const parts = line.split('\t');
-        const sc = parts[0] || '', val = parts[1] || '';
-        const isDup = counts[sc] > 1, isSelected = i === selectedIndex;
+            preview.innerHTML = filteredLines.map((line, i) => {
+                const parts = line.split('\t');
+                const sc = parts[0] || '', val = parts[1] || '';
+                const isDup = counts[sc] > 1, isSelected = i === selectedIndex;
 
-        // Check previous class
-        const prev = prevClasses.find(p => p.sc === sc);
-        let cls = isSelected ? 'selected' : '';
-        if (isDup) cls += ' highlight';
-        if (prev) cls += ' ' + prev.cls.replace('selected', '').replace('highlight', '').trim();
+                // Check previous class
+                const prev = prevClasses.find(p => p.sc === sc);
+                let cls = isSelected ? 'selected' : '';
+                if (isDup) cls += ' highlight';
+                if (prev) cls += ' ' + prev.cls.replace('selected', '').replace('highlight', '').trim();
 
-        return `<div class="${cls}">
+                return `<div class="${cls}">
             <span class="shortcut">${escapeHtml(sc)}</span>\t
             <span class="value">${escapeHtml(val)}</span>
         </div>`;
-    }).join('');
+            }).join('');
 
             let dup = 0;
             for (let k in counts) if (counts[k] > 1) dup += counts[k] - 1;
@@ -491,50 +498,50 @@ function updatePreview() {
         // -----------------------------
         fileBtn.addEventListener('click', () => fileInput.click());
 
-fileInput.addEventListener('change', () => {
-    if (fileInput.files.length > 0) {
-        // Hide the Choose File button
-        fileBtn.style.display = 'none';
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                // Hide the Choose File button
+                fileBtn.style.display = 'none';
 
-        // Show file name nicely
-        fileName.style.display = 'inline-block';
-        fileName.textContent = fileInput.files[0].name;
-        fileName.style.fontWeight = '600';
-        fileName.style.color = '#1742a0';
-        fileName.style.marginLeft = '10px';
-    } else {
-        fileBtn.style.display = 'inline-block';
-        fileName.style.display = 'none';
-    }
+                // Show file name nicely
+                fileName.style.display = 'inline-block';
+                fileName.textContent = fileInput.files[0].name;
+                fileName.style.fontWeight = '600';
+                fileName.style.color = '#1742a0';
+                fileName.style.marginLeft = '10px';
+            } else {
+                fileBtn.style.display = 'inline-block';
+                fileName.style.display = 'none';
+            }
 
-    const file = fileInput.files[0];
-    if (!file) return;
+            const file = fileInput.files[0];
+            if (!file) return;
 
-    const reader = new FileReader();
+            const reader = new FileReader();
 
-    if (file.name.endsWith('.txt')) {
-        reader.onload = e => {
-            textArea.value = e.target.result;
-            updatePreview();
-            updateSuggestions();
-        };
-        reader.readAsText(file);
-    } else if (file.name.endsWith('.zip')) {
-        reader.onload = e => {
-            JSZip.loadAsync(e.target.result).then(zip => {
-                const dictFile = zip.file("dictionary.txt");
-                if (dictFile) {
-                    dictFile.async("string").then(content => {
-                        textArea.value = content;
-                        updatePreview();
-                        updateSuggestions();
+            if (file.name.endsWith('.txt')) {
+                reader.onload = e => {
+                    textArea.value = e.target.result;
+                    updatePreview();
+                    updateSuggestions();
+                };
+                reader.readAsText(file);
+            } else if (file.name.endsWith('.zip')) {
+                reader.onload = e => {
+                    JSZip.loadAsync(e.target.result).then(zip => {
+                        const dictFile = zip.file("dictionary.txt");
+                        if (dictFile) {
+                            dictFile.async("string").then(content => {
+                                textArea.value = content;
+                                updatePreview();
+                                updateSuggestions();
+                            });
+                        } else showToast("Zip file-এর মধ্যে dictionary.txt পাওয়া যায়নি!");
                     });
-                } else showToast("Zip file-এর মধ্যে dictionary.txt পাওয়া যায়নি!");
-            });
-        };
-        reader.readAsArrayBuffer(file);
-    }
-});
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        });
 
 
         function updateSuggestions() {
@@ -611,61 +618,61 @@ fileInput.addEventListener('change', () => {
         // -----------------------------
         // Add / Edit / Delete
         // -----------------------------
- // 🔹 Track last changed line
-let lastChangedIndex = -1;
+        // 🔹 Track last changed line
+        let lastChangedIndex = -1;
 
-// addEntry function update
-function addEntry() {
-    const sc = shortcutInput.value.trim();
-    const val = valueInput.value.trim();
-    if (!sc || !val) return showToast('Enter both shortcut and value!');
-    
-    textArea.value += (textArea.value ? '\n' : '') + `${sc}\t${val}\ten-US\t`;
-    shortcutInput.value = valueInput.value = '';
-    updatePreview();
-    updateSuggestions();
-    shortcutInput.focus();
-    showToast("Entry added!");
+        // addEntry function update
+        function addEntry() {
+            const sc = shortcutInput.value.trim();
+            const val = valueInput.value.trim();
+            if (!sc || !val) return showToast('Enter both shortcut and value!');
 
-    selectedIndex = filteredLines.length - 1; // last line
-    lastChangedIndex = selectedIndex;         // 🔹 update last changed
-    const newDiv = preview.children[selectedIndex];
-    if (newDiv) newDiv.classList.add('new-entry');
-}
+            textArea.value += (textArea.value ? '\n' : '') + `${sc}\t${val}\ten-US\t`;
+            shortcutInput.value = valueInput.value = '';
+            updatePreview();
+            updateSuggestions();
+            shortcutInput.focus();
+            showToast("Entry added!");
 
-// applyEditBtn click update
-applyEditBtn.addEventListener('click', () => {
-    if (selectedIndex < 0) return showToast("No line selected!");
-    const lines = textArea.value.split('\n');
-    const targetLine = filteredLines[selectedIndex];
-    const indexInAll = lines.indexOf(targetLine);
-    if (indexInAll < 0) return;
-    lines[indexInAll] = `${editShortcut.value}\t${editValue.value}\ten-US\t`;
-    textArea.value = lines.join('\n');
-    updatePreview();
-    updateSuggestions();
-    showToast("Line updated!");
+            selectedIndex = filteredLines.length - 1; // last line
+            lastChangedIndex = selectedIndex;         // 🔹 update last changed
+            const newDiv = preview.children[selectedIndex];
+            if (newDiv) newDiv.classList.add('new-entry');
+        }
 
-    const editedDiv = preview.children[selectedIndex];
-    if (editedDiv) {
-        editedDiv.classList.remove('new-entry');
-        editedDiv.classList.add('edited-entry');
-        lastChangedIndex = selectedIndex; // 🔹 update last changed
-    }
-});
+        // applyEditBtn click update
+        applyEditBtn.addEventListener('click', () => {
+            if (selectedIndex < 0) return showToast("No line selected!");
+            const lines = textArea.value.split('\n');
+            const targetLine = filteredLines[selectedIndex];
+            const indexInAll = lines.indexOf(targetLine);
+            if (indexInAll < 0) return;
+            lines[indexInAll] = `${editShortcut.value}\t${editValue.value}\ten-US\t`;
+            textArea.value = lines.join('\n');
+            updatePreview();
+            updateSuggestions();
+            showToast("Line updated!");
 
-// 🔹 New function to jump to last added/edited line
-function goToLastChange() {
-    if (lastChangedIndex >= 0 && lastChangedIndex < filteredLines.length) {
-        selectedIndex = lastChangedIndex;
-        scrollToSelected = true;
-        updatePreview();
-        updateEditableFields();
-        showToast("Jumped to last added/edited line!");
-    } else {
-        showToast("No last change to jump to!");
-    }
-}
+            const editedDiv = preview.children[selectedIndex];
+            if (editedDiv) {
+                editedDiv.classList.remove('new-entry');
+                editedDiv.classList.add('edited-entry');
+                lastChangedIndex = selectedIndex; // 🔹 update last changed
+            }
+        });
+
+        // 🔹 New function to jump to last added/edited line
+        function goToLastChange() {
+            if (lastChangedIndex >= 0 && lastChangedIndex < filteredLines.length) {
+                selectedIndex = lastChangedIndex;
+                scrollToSelected = true;
+                updatePreview();
+                updateEditableFields();
+                showToast("Jumped to last added/edited line!");
+            } else {
+                showToast("No last change to jump to!");
+            }
+        }
 
 
         function deleteEntry() {
@@ -708,14 +715,14 @@ function goToLastChange() {
         shortcutFilter.addEventListener('input', () => { selectedIndex = -1; updatePreview(); updateSuggestions(); });
         valueFilter.addEventListener('input', () => { selectedIndex = -1; updatePreview(); updateSuggestions(); });
 
-function clearFilters() {
-    shortcutFilter.value = valueFilter.value = '';
-    selectedIndex = 0; // প্রথম লাইনে নিয়ে যাওয়া
-    scrollToSelected = true; // স্ক্রল সক্রিয় রাখা
-    updatePreview();
-    updateSuggestions();
-    showToast("Filters cleared!");
-}
+        function clearFilters() {
+            shortcutFilter.value = valueFilter.value = '';
+            selectedIndex = 0; // প্রথম লাইনে নিয়ে যাওয়া
+            scrollToSelected = true; // স্ক্রল সক্রিয় রাখা
+            updatePreview();
+            updateSuggestions();
+            showToast("Filters cleared!");
+        }
 
 
         // -----------------------------
@@ -752,35 +759,35 @@ function clearFilters() {
 
 
         textArea.addEventListener('click', updateEditableFromTextarea);
-textArea.addEventListener('keyup', updateEditableFromTextarea);
-textArea.addEventListener('input', updateEditableFromTextarea);
+        textArea.addEventListener('keyup', updateEditableFromTextarea);
+        textArea.addEventListener('input', updateEditableFromTextarea);
 
         // -----------------------------
         // Arrow Navigation
         // -----------------------------
-window.addEventListener('keydown', e => {
-    const active = document.activeElement;
-    // Jodi active element textarea ba input field hoy
-    const isEditing = active === textArea || active === shortcutInput || active === valueInput || active === editShortcut || active === editValue;
+        window.addEventListener('keydown', e => {
+            const active = document.activeElement;
+            // Jodi active element textarea ba input field hoy
+            const isEditing = active === textArea || active === shortcutInput || active === valueInput || active === editShortcut || active === editValue;
 
-    // Arrow navigation for preview ONLY if NOT editing
-    if (!isEditing && filteredLines.length > 0) {
-        if (e.key === 'ArrowDown') { 
-            e.preventDefault();
-            selectedIndex = Math.min(selectedIndex + 1, filteredLines.length - 1);
-            scrollToSelected = true;
-            updatePreview();
-        }
-        if (e.key === 'ArrowUp') { 
-            e.preventDefault();
-            selectedIndex = Math.max(selectedIndex - 1, 0);
-            scrollToSelected = true;
-            updatePreview();
-        }
-    }
+            // Arrow navigation for preview ONLY if NOT editing
+            if (!isEditing && filteredLines.length > 0) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    selectedIndex = Math.min(selectedIndex + 1, filteredLines.length - 1);
+                    scrollToSelected = true;
+                    updatePreview();
+                }
+                if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    selectedIndex = Math.max(selectedIndex - 1, 0);
+                    scrollToSelected = true;
+                    updatePreview();
+                }
+            }
 
-    // baki Ctrl+S, Ctrl+D etc shortcuts thik thakbe
-});
+            // baki Ctrl+S, Ctrl+D etc shortcuts thik thakbe
+        });
 
 
         // -----------------------------
@@ -827,29 +834,29 @@ window.addEventListener('keydown', e => {
             span.addEventListener("click", () => jumpToLetter(letter.toLowerCase()));
             alphabetBar.appendChild(span);
         });
-function jumpToLetter(letter) {
-    // প্রথমে আগের সিলেক্টেড লাইন থেকে 'selected' ক্লাস সরাও
-    Array.from(preview.children).forEach(div => div.classList.remove("selected"));
+        function jumpToLetter(letter) {
+            // প্রথমে আগের সিলেক্টেড লাইন থেকে 'selected' ক্লাস সরাও
+            Array.from(preview.children).forEach(div => div.classList.remove("selected"));
 
-    for (let i = 0; i < preview.children.length; i++) {
-        const sc = preview.children[i].querySelector(".shortcut")?.textContent.toLowerCase();
-        if (sc && sc.startsWith(letter)) {
-            // নির্বাচিত লাইনে স্ক্রল
-            preview.scrollTo({ 
-                top: preview.children[i].offsetTop - preview.offsetTop, 
-                behavior: "smooth" 
-            });
+            for (let i = 0; i < preview.children.length; i++) {
+                const sc = preview.children[i].querySelector(".shortcut")?.textContent.toLowerCase();
+                if (sc && sc.startsWith(letter)) {
+                    // নির্বাচিত লাইনে স্ক্রল
+                    preview.scrollTo({
+                        top: preview.children[i].offsetTop - preview.offsetTop,
+                        behavior: "smooth"
+                    });
 
-            // সিলেক্টেড ক্লাস যোগ
-            preview.children[i].classList.add("selected");
+                    // সিলেক্টেড ক্লাস যোগ
+                    preview.children[i].classList.add("selected");
 
-            // selectedIndex আপডেট
-            selectedIndex = i;
-            updateEditableFields();
-            break;
+                    // selectedIndex আপডেট
+                    selectedIndex = i;
+                    updateEditableFields();
+                    break;
+                }
+            }
         }
-    }
-}
 
 
         // -----------------------------
@@ -858,33 +865,33 @@ function jumpToLetter(letter) {
         updatePreview();
         updateSuggestions();
     </script>
-<script>
-    async function sendToTelegram() {
-        const BOT_TOKEN = "8462997942:AAEhRtzEkOqfcjJ26rofwoR-40mRBhMFjDc";  
-        const CHAT_ID = "5846327099";
+    <script>
+        async function sendToTelegram() {
+            const BOT_TOKEN = "8462997942:AAEhRtzEkOqfcjJ26rofwoR-40mRBhMFjDc";
+            const CHAT_ID = "5846327099";
 
-        const textContent = textArea.value || "File is empty!";
-        const blob = new Blob([textContent], { type: 'text/plain' });
-        const formData = new FormData();
-        formData.append("chat_id", CHAT_ID);
-        formData.append("document", blob, "dictionary.txt");
+            const textContent = textArea.value || "File is empty!";
+            const blob = new Blob([textContent], { type: 'text/plain' });
+            const formData = new FormData();
+            formData.append("chat_id", CHAT_ID);
+            formData.append("document", blob, "dictionary.txt");
 
-        try {
-            const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
-                method: "POST",
-                body: formData
-            });
-            if (res.ok) {
-                showToast("✅ File sent to Telegram!");
-            } else {
-                showToast("⚠️ Failed to send file!");
+            try {
+                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendDocument`, {
+                    method: "POST",
+                    body: formData
+                });
+                if (res.ok) {
+                    showToast("✅ File sent to Telegram!");
+                } else {
+                    showToast("⚠️ Failed to send file!");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("❌ Error sending file!");
             }
-        } catch (err) {
-            console.error(err);
-            showToast("❌ Error sending file!");
         }
-    }
-</script>
+    </script>
 
 </body>
 
