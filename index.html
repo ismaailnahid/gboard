@@ -299,7 +299,16 @@
                     font-size: 11px;
                 }
             }
-        
+        .new-entry {
+            color: #000000 !important; /* dark yellow */
+    background-color: #07ff77 !important; /* light green */
+}
+
+.edited-entry {
+    color: gold;
+    background-color: #ff0015 !important; /* light red */
+}
+
     </style>
 </head>
 
@@ -327,6 +336,7 @@
             <button class="btn" onclick="downloadZip()">Zip ⬇</button>
              <!-- 🆕 Telegram Upload Button -->
     <button class="btn" onclick="sendToTelegram()">📤 TG </button>
+    <button class="btn" onclick="goToLastChange()">🟢 Last Change</button>
         </div>
 
         <!-- Add Entry -->
@@ -407,31 +417,46 @@
         // -----------------------------
         // Preview Update
         // -----------------------------
-        function updatePreview() {
-            const lines = textArea.value.split('\n');
-            const counts = {};
-            lines.forEach(line => {
-                const sc = line.split('\t')[0];
-                if (sc) counts[sc] = (counts[sc] || 0) + 1;
-            });
+function updatePreview() {
+    const lines = textArea.value.split('\n');
+    const counts = {};
+    lines.forEach(line => {
+        const sc = line.split('\t')[0];
+        if (sc) counts[sc] = (counts[sc] || 0) + 1;
+    });
 
-            const sFilter = shortcutFilter.value.toLowerCase();
-            const vFilter = valueFilter.value.toLowerCase();
-            filteredLines = lines.filter(line => {
-                const parts = line.split('\t');
-                return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
-            });
+    const sFilter = shortcutFilter.value.toLowerCase();
+    const vFilter = valueFilter.value.toLowerCase();
+    filteredLines = lines.filter(line => {
+        const parts = line.split('\t');
+        return (parts[0]?.toLowerCase().includes(sFilter) && parts[1]?.toLowerCase().includes(vFilter));
+    });
 
-            preview.innerHTML = filteredLines.map((line, i) => {
-                const parts = line.split('\t');
-                const sc = parts[0] || '', val = parts[1] || '';
-                const isDup = counts[sc] > 1, isSelected = i === selectedIndex;
+    // Store previous classes
+    const prevClasses = [];
+    Array.from(preview.children).forEach(div => {
+        prevClasses.push({
+            sc: div.querySelector(".shortcut")?.textContent,
+            cls: div.className
+        });
+    });
 
-                return `<div class="${isSelected ? 'selected' : ''} ${isDup ? 'highlight' : ''}">
-                    <span class="shortcut">${escapeHtml(sc)}</span>\t
-                    <span class="value">${escapeHtml(val)}</span>
-                </div>`;
-            }).join('');
+    preview.innerHTML = filteredLines.map((line, i) => {
+        const parts = line.split('\t');
+        const sc = parts[0] || '', val = parts[1] || '';
+        const isDup = counts[sc] > 1, isSelected = i === selectedIndex;
+
+        // Check previous class
+        const prev = prevClasses.find(p => p.sc === sc);
+        let cls = isSelected ? 'selected' : '';
+        if (isDup) cls += ' highlight';
+        if (prev) cls += ' ' + prev.cls.replace('selected', '').replace('highlight', '').trim();
+
+        return `<div class="${cls}">
+            <span class="shortcut">${escapeHtml(sc)}</span>\t
+            <span class="value">${escapeHtml(val)}</span>
+        </div>`;
+    }).join('');
 
             let dup = 0;
             for (let k in counts) if (counts[k] > 1) dup += counts[k] - 1;
@@ -466,42 +491,51 @@
         // -----------------------------
         fileBtn.addEventListener('click', () => fileInput.click());
 
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                fileName.style.display = 'inline';
-                fileName.textContent = fileInput.files[0].name;
-            } else {
-                fileName.style.display = 'none';
-            }
+fileInput.addEventListener('change', () => {
+    if (fileInput.files.length > 0) {
+        // Hide the Choose File button
+        fileBtn.style.display = 'none';
 
-            const file = fileInput.files[0];
-            if (!file) return;
+        // Show file name nicely
+        fileName.style.display = 'inline-block';
+        fileName.textContent = fileInput.files[0].name;
+        fileName.style.fontWeight = '600';
+        fileName.style.color = '#1742a0';
+        fileName.style.marginLeft = '10px';
+    } else {
+        fileBtn.style.display = 'inline-block';
+        fileName.style.display = 'none';
+    }
 
-            const reader = new FileReader();
+    const file = fileInput.files[0];
+    if (!file) return;
 
-            if (file.name.endsWith('.txt')) {
-                reader.onload = e => {
-                    textArea.value = e.target.result;
-                    updatePreview();
-                    updateSuggestions();
-                };
-                reader.readAsText(file);
-            } else if (file.name.endsWith('.zip')) {
-                reader.onload = e => {
-                    JSZip.loadAsync(e.target.result).then(zip => {
-                        const dictFile = zip.file("dictionary.txt");
-                        if (dictFile) {
-                            dictFile.async("string").then(content => {
-                                textArea.value = content;
-                                updatePreview();
-                                updateSuggestions();
-                            });
-                        } else showToast("Zip file-এর মধ্যে dictionary.txt পাওয়া যায়নি!");
+    const reader = new FileReader();
+
+    if (file.name.endsWith('.txt')) {
+        reader.onload = e => {
+            textArea.value = e.target.result;
+            updatePreview();
+            updateSuggestions();
+        };
+        reader.readAsText(file);
+    } else if (file.name.endsWith('.zip')) {
+        reader.onload = e => {
+            JSZip.loadAsync(e.target.result).then(zip => {
+                const dictFile = zip.file("dictionary.txt");
+                if (dictFile) {
+                    dictFile.async("string").then(content => {
+                        textArea.value = content;
+                        updatePreview();
+                        updateSuggestions();
                     });
-                };
-                reader.readAsArrayBuffer(file);
-            }
-        });
+                } else showToast("Zip file-এর মধ্যে dictionary.txt পাওয়া যায়নি!");
+            });
+        };
+        reader.readAsArrayBuffer(file);
+    }
+});
+
 
         function updateSuggestions() {
             const lines = textArea.value.split('\n');
@@ -577,31 +611,62 @@
         // -----------------------------
         // Add / Edit / Delete
         // -----------------------------
-        function addEntry() {
-            const sc = shortcutInput.value.trim();
-            const val = valueInput.value.trim();
-            if (!sc || !val) return showToast('Enter both shortcut and value!');
+ // 🔹 Track last changed line
+let lastChangedIndex = -1;
 
-            textArea.value += (textArea.value ? '\n' : '') + `${sc}\t${val}\ten-US\t`;
-            shortcutInput.value = valueInput.value = '';
-            updatePreview();
-            updateSuggestions();
-            shortcutInput.focus();
-            showToast("Entry added!");
-        }
+// addEntry function update
+function addEntry() {
+    const sc = shortcutInput.value.trim();
+    const val = valueInput.value.trim();
+    if (!sc || !val) return showToast('Enter both shortcut and value!');
+    
+    textArea.value += (textArea.value ? '\n' : '') + `${sc}\t${val}\ten-US\t`;
+    shortcutInput.value = valueInput.value = '';
+    updatePreview();
+    updateSuggestions();
+    shortcutInput.focus();
+    showToast("Entry added!");
 
-        applyEditBtn.addEventListener('click', () => {
-            if (selectedIndex < 0) return showToast("No line selected!");
-            const lines = textArea.value.split('\n');
-            const targetLine = filteredLines[selectedIndex];
-            const indexInAll = lines.indexOf(targetLine);
-            if (indexInAll < 0) return;
-            lines[indexInAll] = `${editShortcut.value}\t${editValue.value}\ten-US\t`;
-            textArea.value = lines.join('\n');
-            updatePreview();
-            updateSuggestions();
-            showToast("Line updated!");
-        });
+    selectedIndex = filteredLines.length - 1; // last line
+    lastChangedIndex = selectedIndex;         // 🔹 update last changed
+    const newDiv = preview.children[selectedIndex];
+    if (newDiv) newDiv.classList.add('new-entry');
+}
+
+// applyEditBtn click update
+applyEditBtn.addEventListener('click', () => {
+    if (selectedIndex < 0) return showToast("No line selected!");
+    const lines = textArea.value.split('\n');
+    const targetLine = filteredLines[selectedIndex];
+    const indexInAll = lines.indexOf(targetLine);
+    if (indexInAll < 0) return;
+    lines[indexInAll] = `${editShortcut.value}\t${editValue.value}\ten-US\t`;
+    textArea.value = lines.join('\n');
+    updatePreview();
+    updateSuggestions();
+    showToast("Line updated!");
+
+    const editedDiv = preview.children[selectedIndex];
+    if (editedDiv) {
+        editedDiv.classList.remove('new-entry');
+        editedDiv.classList.add('edited-entry');
+        lastChangedIndex = selectedIndex; // 🔹 update last changed
+    }
+});
+
+// 🔹 New function to jump to last added/edited line
+function goToLastChange() {
+    if (lastChangedIndex >= 0 && lastChangedIndex < filteredLines.length) {
+        selectedIndex = lastChangedIndex;
+        scrollToSelected = true;
+        updatePreview();
+        updateEditableFields();
+        showToast("Jumped to last added/edited line!");
+    } else {
+        showToast("No last change to jump to!");
+    }
+}
+
 
         function deleteEntry() {
             if (selectedIndex < 0) return showToast("No line selected!");
@@ -643,13 +708,15 @@
         shortcutFilter.addEventListener('input', () => { selectedIndex = -1; updatePreview(); updateSuggestions(); });
         valueFilter.addEventListener('input', () => { selectedIndex = -1; updatePreview(); updateSuggestions(); });
 
-        function clearFilters() {
-            shortcutFilter.value = valueFilter.value = '';
-            selectedIndex = -1;
-            updatePreview();
-            updateSuggestions();
-            showToast("Filters cleared!");
-        }
+function clearFilters() {
+    shortcutFilter.value = valueFilter.value = '';
+    selectedIndex = 0; // প্রথম লাইনে নিয়ে যাওয়া
+    scrollToSelected = true; // স্ক্রল সক্রিয় রাখা
+    updatePreview();
+    updateSuggestions();
+    showToast("Filters cleared!");
+}
+
 
         // -----------------------------
         // TextArea Click
@@ -783,7 +850,5 @@
         }
     }
 </script>
-
 </body>
-
 </html>
