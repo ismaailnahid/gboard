@@ -752,12 +752,30 @@ function clearFilters() {
         // -----------------------------
         // Arrow Navigation
         // -----------------------------
-        window.addEventListener('keydown', e => {
-            if (filteredLines.length > 0) {
-                if (e.key === 'ArrowDown') { e.preventDefault(); selectedIndex = Math.min(selectedIndex + 1, filteredLines.length - 1); updatePreview(); }
-                if (e.key === 'ArrowUp') { e.preventDefault(); selectedIndex = Math.max(selectedIndex - 1, 0); updatePreview(); }
-            }
-        });
+window.addEventListener('keydown', e => {
+    const active = document.activeElement;
+    // Jodi active element textarea ba input field hoy
+    const isEditing = active === textArea || active === shortcutInput || active === valueInput || active === editShortcut || active === editValue;
+
+    // Arrow navigation for preview ONLY if NOT editing
+    if (!isEditing && filteredLines.length > 0) {
+        if (e.key === 'ArrowDown') { 
+            e.preventDefault();
+            selectedIndex = Math.min(selectedIndex + 1, filteredLines.length - 1);
+            scrollToSelected = true;
+            updatePreview();
+        }
+        if (e.key === 'ArrowUp') { 
+            e.preventDefault();
+            selectedIndex = Math.max(selectedIndex - 1, 0);
+            scrollToSelected = true;
+            updatePreview();
+        }
+    }
+
+    // baki Ctrl+S, Ctrl+D etc shortcuts thik thakbe
+});
+
 
         // -----------------------------
         // Add Entry Enter Key
@@ -850,5 +868,7 @@ function clearFilters() {
         }
     }
 </script>
+
 </body>
+
 </html>
