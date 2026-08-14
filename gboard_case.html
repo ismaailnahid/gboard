@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -338,8 +338,6 @@
     /* REDMI NOTE 15 5G SPECIFIC (1080x2400)   */
     /* ======================================== */
     @media (max-width: 1080px) {
-
-      /* ফন্ট সাইজ বাড়ানো - টাচ এর জন্য */
       html {
         font-size: 16px;
       }
@@ -725,10 +723,10 @@
 
     <!-- Upload Row -->
     <div class="upload-row">
-      <span class="label">📂 ফাইল</span>
+      <span class="label">📂 File</span>
       <div class="file-input-wrap">
         <input type="file" id="fileInput" accept=".txt">
-        <span class="file-name placeholder" id="fileNameDisplay">কোনো ফাইল নেই</span>
+        <span class="file-name placeholder" id="fileNameDisplay">No file selected</span>
       </div>
       <div class="stats-badge">
         <span>🔤 <span class="num" id="shortcutCount">0</span></span>
@@ -740,31 +738,31 @@
     <div class="actions">
       <button class="btn btn-primary" id="convertUpperBtn" disabled>🔼 UPPER</button>
       <button class="btn btn-secondary" id="convertLowerBtn" disabled>🔽 lower</button>
-      <button class="btn btn-secondary" id="swapCaseBtn" disabled>🔁 টগল</button>
+      <button class="btn btn-secondary" id="swapCaseBtn" disabled>🔁 Toggle</button>
       <button class="btn btn-warning" id="titleCaseBtn" disabled>📝 Title</button>
-      <button class="btn btn-success" id="downloadBtn" disabled>⬇ ডাউনলোড</button>
-      <button class="btn btn-danger" id="resetBtn">🗑 রিসেট</button>
+      <button class="btn btn-success" id="downloadBtn" disabled>⬇ Download</button>
+      <button class="btn btn-danger" id="resetBtn">🗑 Reset</button>
     </div>
 
     <!-- Extra formatting options -->
     <div class="actions" style="margin-top: -2px; border-top: 1px solid #1e2a3d; padding-top: 10px;">
       <span style="font-size:12px; color:#64748b; display:flex; align-items:center; gap:4px;">
-        ⚙️ এক্সট্রা:
+        ⚙️ Extra:
       </span>
-      <button class="btn btn-secondary" id="trimSpacesBtn" disabled>✂️ স্পেস ট্রিম</button>
-      <button class="btn btn-secondary" id="removeDuplicatesBtn" disabled>🧹 ডুপ্লিকেট</button>
-      <button class="btn btn-secondary" id="sortEntriesBtn" disabled>🔤 সর্ট</button>
-      <button class="btn btn-secondary" id="exportCleanBtn" disabled>🧼 ক্লিন</button>
+      <button class="btn btn-secondary" id="trimSpacesBtn" disabled>✂️ Trim Spaces</button>
+      <button class="btn btn-secondary" id="removeDuplicatesBtn" disabled>🧹 Remove Duplicates</button>
+      <button class="btn btn-secondary" id="sortEntriesBtn" disabled>🔤 Sort</button>
+      <button class="btn btn-secondary" id="exportCleanBtn" disabled>🧼 Clean Export</button>
     </div>
 
     <!-- Preview -->
     <div class="preview-wrap">
       <div class="preview" id="previewArea">
-        <span class="hl-meta"># ফাইল আপলোড করুন</span>
+        <span class="hl-meta"># Upload a file to preview</span>
       </div>
     </div>
     <div class="footer">
-      ⚡ <strong>শর্টকাট</strong> ও <strong>শব্দ</strong> — কেস পরিবর্তন · বাকি অপরিবর্তিত
+      ⚡ <strong>Shortcut</strong> &amp; <strong>Word</strong> — case conversion only · everything else unchanged
     </div>
   </div>
 
@@ -772,7 +770,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    (function () {
+    (function() {
       // DOM
       const fileInput = document.getElementById('fileInput');
       const fileNameDisplay = document.getElementById('fileNameDisplay');
@@ -890,7 +888,7 @@
 
       function updateUI(lines, mode, stats) {
         if (!lines || lines.length === 0) {
-          previewArea.innerHTML = `<span class="hl-meta"># ফাইল লোড হয়নি</span>`;
+          previewArea.innerHTML = `<span class="hl-meta"># No file loaded</span>`;
           shortcutCount.textContent = '0';
           entryCount.textContent = '0';
           return;
@@ -1015,7 +1013,7 @@
       // ----- apply operation & update -----
       function applyOperation(operation, label) {
         if (!fileLoaded || !currentLines.length) {
-          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          showToast('⚠️ Please upload a file first');
           return;
         }
         const result = operation(currentLines);
@@ -1024,7 +1022,7 @@
         updateUI(result, currentCaseMode, stats);
         shortcutCount.textContent = stats.shortcutCount;
         entryCount.textContent = stats.entryCount;
-        showToast(`✅ ${label} সম্পন্ন!`);
+        showToast(`✅ ${label} completed!`);
       }
 
       // load file
@@ -1049,7 +1047,7 @@
         ].forEach(btn => {
           btn.disabled = false;
         });
-        showToast(`📂 ${fileName} লোড হয়েছে`);
+        showToast(`📂 ${fileName} loaded successfully`);
       }
 
       function handleFile(file) {
@@ -1065,7 +1063,7 @@
       // convert helper
       function convertTo(mode, label) {
         if (!fileLoaded || !originalLines.length) {
-          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          showToast('⚠️ Please upload a file first');
           return;
         }
         const result = processLines(originalLines, mode);
@@ -1074,7 +1072,7 @@
         updateUI(currentLines, mode, { shortcutCount: result.shortcutCount, entryCount: result.entryCount });
         shortcutCount.textContent = result.shortcutCount;
         entryCount.textContent = result.entryCount;
-        showToast(`✅ ${label} প্রয়োগ করা হয়েছে`);
+        showToast(`✅ ${label} applied`);
       }
 
       // ---------- events ----------
@@ -1094,7 +1092,7 @@
           if (file.name.endsWith('.txt')) {
             handleFile(file);
           } else {
-            showToast('⚠️ শুধু .txt ফাইল সমর্থিত', 2500);
+            showToast('⚠️ Only .txt files are supported', 2500);
           }
         }
       });
@@ -1108,14 +1106,14 @@
       });
       titleCaseBtn.addEventListener('click', () => convertTo('title', 'Title Case'));
 
-      trimSpacesBtn.addEventListener('click', () => applyOperation(trimSpaces, 'স্পেস ট্রিম'));
-      removeDuplicatesBtn.addEventListener('click', () => applyOperation(removeDuplicates, 'ডুপ্লিকেট রিমুভ'));
-      sortEntriesBtn.addEventListener('click', () => applyOperation(sortEntries, 'সর্ট (A→Z)'));
-      exportCleanBtn.addEventListener('click', () => applyOperation(cleanExport, 'ক্লিন এক্সপোর্ট'));
+      trimSpacesBtn.addEventListener('click', () => applyOperation(trimSpaces, 'Trim Spaces'));
+      removeDuplicatesBtn.addEventListener('click', () => applyOperation(removeDuplicates, 'Remove Duplicates'));
+      sortEntriesBtn.addEventListener('click', () => applyOperation(sortEntries, 'Sort (A→Z)'));
+      exportCleanBtn.addEventListener('click', () => applyOperation(cleanExport, 'Clean Export'));
 
       downloadBtn.addEventListener('click', () => {
         if (!fileLoaded || !currentLines.length) {
-          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          showToast('⚠️ Please upload a file first');
           return;
         }
         const content = currentLines.join('\n');
@@ -1129,7 +1127,7 @@
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
-        showToast('⬇ ডাউনলোড শুরু!');
+        showToast('⬇ Download started!');
       });
 
       resetBtn.addEventListener('click', () => {
@@ -1138,18 +1136,18 @@
         currentLines = [];
         currentCaseMode = 'original';
         fileName = '';
-        fileNameDisplay.textContent = 'কোনো ফাইল নেই';
+        fileNameDisplay.textContent = 'No file selected';
         fileNameDisplay.classList.add('placeholder');
         shortcutCount.textContent = '0';
         entryCount.textContent = '0';
-        previewArea.innerHTML = `<span class="hl-meta"># ফাইল আপলোড করুন</span>`;
+        previewArea.innerHTML = `<span class="hl-meta"># Upload a file to preview</span>`;
         [convertUpperBtn, convertLowerBtn, swapCaseBtn, titleCaseBtn, downloadBtn,
           trimSpacesBtn, removeDuplicatesBtn, sortEntriesBtn, exportCleanBtn
         ].forEach(btn => {
           btn.disabled = true;
         });
         fileInput.value = '';
-        showToast('🔄 রিসেট করা হয়েছে');
+        showToast('🔄 Reset completed');
       });
 
       // init
