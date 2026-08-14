@@ -1915,6 +1915,7 @@
                         <button class="btn btn-success" onclick="exportToPcTxt()">💻 PC TXT</button>
                         <button class="btn btn-warning" onclick="sendToTelegram()">📤 Telegram</button>
                         <button class="btn" onclick="goToLastChange()">🟢 Changed</button>
+                        <button class="btn btn-primary" onclick="goToHomePage()">🏠 Case Formatter</button>
                     </div>
                 </div>
 
@@ -2781,6 +2782,14 @@
             } else {
                 showToast("No changes to jump to!", 'error');
             }
+        }
+
+        // ==================== HOME PAGE NAVIGATION ====================
+        function goToHomePage() {
+            // Root folder-এর main page-এ নিয়ে যাবে
+            window.location.href = './';  // অথবা 'index.html'
+            // অথবা
+            // window.location.href = '/';
         }
 
         // ==================== TELEGRAM SETTINGS ====================
