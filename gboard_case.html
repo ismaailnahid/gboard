@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gboard Dictionary Tool · Dark</title>
+  <style>
+    /* ======================================== */
+    /* BASE STYLES */
+    /* ======================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0b0f1a;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 12px 10px;
+      line-height: 1.5;
+    }
+
+    .container {
+      background: #141b2b;
+      max-width: 1000px;
+      width: 100%;
+      padding: 16px 14px;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.03);
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    h1 small {
+      font-size: 11px;
+      font-weight: 400;
+      color: #64748b;
+      background: #1e293b;
+      padding: 2px 12px;
+      border-radius: 40px;
+    }
+
+    /* ======================================== */
+    /* UPLOAD ROW - REDMI OPTIMIZED */
+    /* ======================================== */
+    .upload-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #101826;
+      padding: 8px 12px;
+      border-radius: 60px;
+      border: 1px solid #28344a;
+      margin-bottom: 14px;
+      transition: 0.2s;
+      flex-wrap: wrap;
+    }
+
+    .upload-row:hover {
+      border-color: #4b7bec;
+      background: #172133;
+    }
+
+    .upload-row .label {
+      font-size: 13px;
+      color: #94a3b8;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .upload-row .file-input-wrap {
+      flex: 1;
+      min-width: 100px;
+      position: relative;
+    }
+
+    .upload-row .file-input-wrap input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .upload-row .file-name {
+      background: #1e293b;
+      padding: 5px 14px;
+      border-radius: 40px;
+      font-size: 12px;
+      color: #cbd5e1;
+      border: 1px solid #2d3a52;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 140px;
+      display: inline-block;
+    }
+
+    .upload-row .file-name.placeholder {
+      color: #64748b;
+    }
+
+    .upload-row .stats-badge {
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      color: #94a3b8;
+      background: #1a2335;
+      padding: 3px 14px;
+      border-radius: 40px;
+      border: 1px solid #28344a;
+      white-space: nowrap;
+    }
+
+    .upload-row .stats-badge span {
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .upload-row .stats-badge .num {
+      color: #60a5fa;
+    }
+
+    /* ======================================== */
+    /* BUTTONS - TOUCH FRIENDLY */
+    /* ======================================== */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0 12px;
+    }
+
+    .btn {
+      background: #1e293b;
+      border: 1px solid #2d3a52;
+      padding: 8px 14px;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 12px;
+      color: #e2e8f0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: 0.15s;
+      min-height: 40px;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:active {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: #2d3a52;
+      border-color: #3b4a66;
+    }
+
+    .btn-secondary:active {
+      background: #3b4a66;
+    }
+
+    .btn-success {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .btn-success:active {
+      background: #047857;
+    }
+
+    .btn-warning {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .btn-warning:active {
+      background: #b45309;
+    }
+
+    .btn-danger {
+      background: #b91c1c;
+      border-color: #b91c1c;
+      color: white;
+    }
+
+    .btn-danger:active {
+      background: #991b1b;
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* ======================================== */
+    /* PREVIEW - SCROLLABLE */
+    /* ======================================== */
+    .preview-wrap {
+      border-radius: 18px;
+      padding: 3px;
+      background: #0b111f;
+      border: 1px solid #1e2a3d;
+    }
+
+    .preview {
+      background: #0b111f;
+      color: #d1d9e6;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 350px;
+      overflow-y: auto;
+      line-height: 1.7;
+      scrollbar-width: thin;
+      scrollbar-color: #2d3a52 #0b111f;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .preview::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .preview::-webkit-scrollbar-track {
+      background: #0b111f;
+    }
+
+    .preview::-webkit-scrollbar-thumb {
+      background: #2d3a52;
+      border-radius: 20px;
+    }
+
+    .preview .hl-shortcut {
+      color: #fcd34d;
+      font-weight: 600;
+    }
+
+    .preview .hl-word {
+      color: #67e8f9;
+    }
+
+    .preview .hl-meta {
+      color: #6b7b93;
+    }
+
+    .preview .hl-comment {
+      color: #4b5b73;
+      font-style: italic;
+    }
+
+    .preview .hl-error {
+      color: #f87171;
+      background: #7f1d1d40;
+      border-radius: 4px;
+      padding: 0 4px;
+    }
+
+    .footer {
+      margin-top: 14px;
+      font-size: 11px;
+      color: #4b5b73;
+      text-align: center;
+      border-top: 1px solid #1e2a3d;
+      padding-top: 10px;
+    }
+
+    .footer strong {
+      color: #7e8ea8;
+    }
+
+    /* ======================================== */
+    /* TOAST - BOTTOM */
+    /* ======================================== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e293b;
+      border: 1px solid #3b4a66;
+      padding: 10px 20px;
+      border-radius: 40px;
+      font-size: 13px;
+      color: #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 999;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    /* ======================================== */
+    /* REDMI NOTE 15 5G SPECIFIC (1080x2400)   */
+    /* ======================================== */
+    @media (max-width: 1080px) {
+
+      /* ফন্ট সাইজ বাড়ানো - টাচ এর জন্য */
+      html {
+        font-size: 16px;
+      }
+
+      .container {
+        padding: 14px 12px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      h1 small {
+        font-size: 12px;
+        padding: 3px 14px;
+      }
+
+      .upload-row {
+        padding: 10px 14px;
+        gap: 10px;
+        border-radius: 50px;
+      }
+
+      .upload-row .label {
+        font-size: 14px;
+      }
+
+      .upload-row .file-name {
+        font-size: 13px;
+        padding: 6px 16px;
+        max-width: 160px;
+        min-height: 36px;
+      }
+
+      .upload-row .stats-badge {
+        font-size: 12px;
+        padding: 4px 16px;
+        gap: 14px;
+        min-height: 36px;
+      }
+
+      .btn {
+        padding: 10px 18px;
+        font-size: 13px;
+        min-height: 44px;
+        border-radius: 44px;
+        gap: 6px;
+      }
+
+      .actions {
+        gap: 8px;
+        margin: 10px 0 14px;
+      }
+
+      .preview {
+        font-size: 13px;
+        padding: 16px 18px;
+        max-height: 380px;
+        line-height: 1.8;
+      }
+
+      .footer {
+        font-size: 12px;
+        padding-top: 12px;
+        margin-top: 14px;
+      }
+
+      .toast {
+        font-size: 14px;
+        padding: 12px 24px;
+        bottom: 40px;
+        border-radius: 44px;
+      }
+    }
+
+    /* ======================================== */
+    /* SMALL SCREENS (480px and below)          */
+    /* ======================================== */
+    @media (max-width: 480px) {
+      body {
+        padding: 8px 6px;
+      }
+
+      .container {
+        padding: 12px 10px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 18px;
+        gap: 6px;
+        margin-bottom: 10px;
+      }
+
+      h1 small {
+        font-size: 10px;
+        padding: 2px 10px;
+      }
+
+      .upload-row {
+        padding: 6px 10px;
+        gap: 6px;
+        border-radius: 40px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .upload-row .label {
+        font-size: 12px;
+        min-width: fit-content;
+      }
+
+      .upload-row .file-input-wrap {
+        min-width: 80px;
+        flex: 1 1 120px;
+      }
+
+      .upload-row .file-name {
+        font-size: 11px;
+        padding: 4px 12px;
+        max-width: 100px;
+        min-height: 30px;
+      }
+
+      .upload-row .stats-badge {
+        font-size: 10px;
+        padding: 3px 10px;
+        gap: 8px;
+        min-height: 30px;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        font-size: 11px;
+        min-height: 34px;
+        border-radius: 34px;
+        gap: 3px;
+        flex: 1 0 auto;
+        justify-content: center;
+      }
+
+      .actions {
+        gap: 5px;
+        margin: 6px 0 10px;
+      }
+
+      .actions .btn {
+        flex: 1 0 calc(50% - 6px);
+        min-width: 60px;
+      }
+
+      .preview {
+        font-size: 11px;
+        padding: 12px 14px;
+        max-height: 280px;
+        line-height: 1.6;
+      }
+
+      .footer {
+        font-size: 10px;
+        padding-top: 10px;
+        margin-top: 12px;
+      }
+
+      .toast {
+        font-size: 12px;
+        padding: 8px 16px;
+        bottom: 30px;
+        border-radius: 34px;
+        max-width: 92%;
+      }
+    }
+
+    /* ======================================== */
+    /* VERY SMALL (320px and below)             */
+    /* ======================================== */
+    @media (max-width: 360px) {
+      body {
+        padding: 4px;
+      }
+
+      .container {
+        padding: 8px 6px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        font-size: 15px;
+        gap: 4px;
+        margin-bottom: 8px;
+      }
+
+      h1 small {
+        font-size: 9px;
+        padding: 1px 8px;
+      }
+
+      .upload-row {
+        padding: 4px 8px;
+        gap: 4px;
+        border-radius: 30px;
+      }
+
+      .upload-row .label {
+        font-size: 10px;
+      }
+
+      .upload-row .file-name {
+        font-size: 10px;
+        padding: 3px 8px;
+        max-width: 70px;
+        min-height: 26px;
+      }
+
+      .upload-row .stats-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+        gap: 4px;
+        min-height: 26px;
+      }
+
+      .btn {
+        padding: 4px 8px;
+        font-size: 10px;
+        min-height: 28px;
+        border-radius: 28px;
+        gap: 2px;
+      }
+
+      .actions {
+        gap: 4px;
+        margin: 4px 0 8px;
+      }
+
+      .actions .btn {
+        flex: 1 0 calc(50% - 4px);
+        min-width: 50px;
+      }
+
+      .preview {
+        font-size: 10px;
+        padding: 8px 10px;
+        max-height: 220px;
+        line-height: 1.5;
+      }
+
+      .footer {
+        font-size: 9px;
+        padding-top: 8px;
+        margin-top: 10px;
+      }
+
+      .toast {
+        font-size: 11px;
+        padding: 6px 12px;
+        bottom: 20px;
+        border-radius: 28px;
+        max-width: 95%;
+      }
+    }
+
+    /* ======================================== */
+    /* TOUCH DEVICE OPTIMIZATIONS               */
+    /* ======================================== */
+    @media (hover: none) and (pointer: coarse) {
+
+      .btn:hover,
+      .upload-row:hover {
+        transform: none;
+      }
+
+      .btn:active {
+        transform: scale(0.95);
+        opacity: 0.85;
+      }
+
+      .upload-row:active {
+        transform: scale(0.98);
+      }
+
+      .preview div:active {
+        background: rgba(37, 99, 235, 0.15);
+      }
+    }
+
+    /* ======================================== */
+    /* LANDSCAPE MODE                          */
+    /* ======================================== */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        padding: 4px 8px;
+      }
+
+      .container {
+        padding: 8px 12px;
+        border-radius: 14px;
+      }
+
+      h1 {
+        font-size: 16px;
+        margin-bottom: 6px;
+      }
+
+      .upload-row {
+        padding: 4px 10px;
+        margin-bottom: 6px;
+      }
+
+      .preview {
+        max-height: 180px;
+        padding: 10px 14px;
+      }
+
+      .btn {
+        min-height: 30px;
+        padding: 4px 10px;
+        font-size: 10px;
+      }
+
+      .actions {
+        margin: 4px 0 8px;
+        gap: 4px;
+      }
+
+      .footer {
+        margin-top: 8px;
+        padding-top: 6px;
+      }
+
+      .toast {
+        bottom: 15px;
+        padding: 6px 14px;
+        font-size: 11px;
+      }
+    }
+
+    /* ======================================== */
+    /* SAFE AREA (Notch/Punch Hole)            */
+    /* ======================================== */
+    @supports (padding-top: env(safe-area-inset-top)) {
+      body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+
+      .toast {
+        bottom: max(30px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* ======================================== */
+    /* REDUCED MOTION                          */
+    /* ======================================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ======================================== */
+    /* SCROLLBAR FOR PREVIEW (Firefox)         */
+    /* ======================================== */
+    .preview {
+      scrollbar-width: thin;
+      scrollbar-color: #2d3a52 #0b111f;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>
+      🌙 Gboard <span style="color:#60a5fa;">Tool</span>
+      <small>Dark</small>
+    </h1>
+
+    <!-- Upload Row -->
+    <div class="upload-row">
+      <span class="label">📂 ফাইল</span>
+      <div class="file-input-wrap">
+        <input type="file" id="fileInput" accept=".txt">
+        <span class="file-name placeholder" id="fileNameDisplay">কোনো ফাইল নেই</span>
+      </div>
+      <div class="stats-badge">
+        <span>🔤 <span class="num" id="shortcutCount">0</span></span>
+        <span>📄 <span class="num" id="entryCount">0</span></span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions">
+      <button class="btn btn-primary" id="convertUpperBtn" disabled>🔼 UPPER</button>
+      <button class="btn btn-secondary" id="convertLowerBtn" disabled>🔽 lower</button>
+      <button class="btn btn-secondary" id="swapCaseBtn" disabled>🔁 টগল</button>
+      <button class="btn btn-warning" id="titleCaseBtn" disabled>📝 Title</button>
+      <button class="btn btn-success" id="downloadBtn" disabled>⬇ ডাউনলোড</button>
+      <button class="btn btn-danger" id="resetBtn">🗑 রিসেট</button>
+    </div>
+
+    <!-- Extra formatting options -->
+    <div class="actions" style="margin-top: -2px; border-top: 1px solid #1e2a3d; padding-top: 10px;">
+      <span style="font-size:12px; color:#64748b; display:flex; align-items:center; gap:4px;">
+        ⚙️ এক্সট্রা:
+      </span>
+      <button class="btn btn-secondary" id="trimSpacesBtn" disabled>✂️ স্পেস ট্রিম</button>
+      <button class="btn btn-secondary" id="removeDuplicatesBtn" disabled>🧹 ডুপ্লিকেট</button>
+      <button class="btn btn-secondary" id="sortEntriesBtn" disabled>🔤 সর্ট</button>
+      <button class="btn btn-secondary" id="exportCleanBtn" disabled>🧼 ক্লিন</button>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-wrap">
+      <div class="preview" id="previewArea">
+        <span class="hl-meta"># ফাইল আপলোড করুন</span>
+      </div>
+    </div>
+    <div class="footer">
+      ⚡ <strong>শর্টকাট</strong> ও <strong>শব্দ</strong> — কেস পরিবর্তন · বাকি অপরিবর্তিত
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    (function () {
+      // DOM
+      const fileInput = document.getElementById('fileInput');
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      const shortcutCount = document.getElementById('shortcutCount');
+      const entryCount = document.getElementById('entryCount');
+      const previewArea = document.getElementById('previewArea');
+
+      const convertUpperBtn = document.getElementById('convertUpperBtn');
+      const convertLowerBtn = document.getElementById('convertLowerBtn');
+      const swapCaseBtn = document.getElementById('swapCaseBtn');
+      const titleCaseBtn = document.getElementById('titleCaseBtn');
+      const downloadBtn = document.getElementById('downloadBtn');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const trimSpacesBtn = document.getElementById('trimSpacesBtn');
+      const removeDuplicatesBtn = document.getElementById('removeDuplicatesBtn');
+      const sortEntriesBtn = document.getElementById('sortEntriesBtn');
+      const exportCleanBtn = document.getElementById('exportCleanBtn');
+
+      const toast = document.getElementById('toast');
+
+      let originalLines = [];
+      let currentLines = [];
+      let currentCaseMode = 'original';
+      let fileLoaded = false;
+      let fileName = '';
+
+      // ---------- helpers ----------
+      function showToast(msg, duration = 2000) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => toast.classList.remove('show'), duration);
+      }
+
+      function applyCase(shortcut, word, mode) {
+        if (mode === 'upper') return { shortcut: shortcut.toUpperCase(), word: word.toUpperCase() };
+        if (mode === 'lower') return { shortcut: shortcut.toLowerCase(), word: word.toLowerCase() };
+        if (mode === 'title') {
+          return {
+            shortcut: shortcut.replace(/\b\w/g, c => c.toUpperCase()),
+            word: word.replace(/\b\w/g, c => c.toUpperCase())
+          };
+        }
+        return { shortcut, word };
+      }
+
+      function parseEntry(line) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('#') || trimmed === '') return null;
+        const parts = trimmed.split('\t');
+        if (parts.length < 2) return null;
+        return {
+          shortcut: parts[0] || '',
+          word: parts[1] || '',
+          lang: parts[2] || '',
+          pos: parts[3] || '',
+          raw: line
+        };
+      }
+
+      function rebuildLine(entry) {
+        return [entry.shortcut, entry.word, entry.lang, entry.pos].join('\t');
+      }
+
+      function processLines(lines, mode) {
+        const newLines = [];
+        let sc = 0,
+          en = 0;
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            newLines.push(line);
+            continue;
+          }
+          const parts = trimmed.split('\t');
+          if (parts.length < 2) {
+            newLines.push(line);
+            continue;
+          }
+          const shortcutRaw = parts[0] || '';
+          const wordRaw = parts[1] || '';
+          const lang = parts[2] || '';
+          const pos = parts[3] || '';
+
+          const converted = applyCase(shortcutRaw, wordRaw, mode);
+          const newLine = [converted.shortcut, converted.word, lang, pos].join('\t');
+          newLines.push(newLine);
+          sc++;
+          en++;
+        }
+        return { lines: newLines, shortcutCount: sc, entryCount: en };
+      }
+
+      function countEntries(lines) {
+        let sc = 0,
+          en = 0;
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') continue;
+          const parts = trimmed.split('\t');
+          if (parts.length >= 2) {
+            sc++;
+            en++;
+          }
+        }
+        return { shortcutCount: sc, entryCount: en };
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function updateUI(lines, mode, stats) {
+        if (!lines || lines.length === 0) {
+          previewArea.innerHTML = `<span class="hl-meta"># ফাইল লোড হয়নি</span>`;
+          shortcutCount.textContent = '0';
+          entryCount.textContent = '0';
+          return;
+        }
+
+        let html = '';
+        let sc = 0,
+          en = 0;
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            html += `<span class="hl-comment">${escapeHtml(line)}</span>\n`;
+            continue;
+          }
+          const parts = trimmed.split('\t');
+          if (parts.length < 2) {
+            html += escapeHtml(line) + '\n';
+            continue;
+          }
+          const shortcut = parts[0] || '';
+          const word = parts[1] || '';
+          const rest = parts.slice(2).join('\t');
+          html += `<span class="hl-shortcut">${escapeHtml(shortcut)}</span>\t`;
+          html += `<span class="hl-word">${escapeHtml(word)}</span>`;
+          if (rest) html += `\t${escapeHtml(rest)}`;
+          html += '\n';
+          sc++;
+          en++;
+        }
+
+        previewArea.innerHTML = html;
+        if (stats) {
+          shortcutCount.textContent = stats.shortcutCount;
+          entryCount.textContent = stats.entryCount;
+        } else {
+          shortcutCount.textContent = sc;
+          entryCount.textContent = en;
+        }
+      }
+
+      // ----- extra functions -----
+      function trimSpaces(lines) {
+        const newLines = [];
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            newLines.push(line);
+            continue;
+          }
+          const parts = trimmed.split('\t');
+          if (parts.length < 2) {
+            newLines.push(line);
+            continue;
+          }
+          parts[0] = parts[0].trim();
+          parts[1] = parts[1].trim();
+          newLines.push(parts.join('\t'));
+        }
+        return newLines;
+      }
+
+      function removeDuplicates(lines) {
+        const seen = new Set();
+        const newLines = [];
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            newLines.push(line);
+            continue;
+          }
+          const parts = trimmed.split('\t');
+          if (parts.length < 2) {
+            newLines.push(line);
+            continue;
+          }
+          const key = parts[0] + '|' + parts[1];
+          if (!seen.has(key)) {
+            seen.add(key);
+            newLines.push(line);
+          }
+        }
+        return newLines;
+      }
+
+      function sortEntries(lines) {
+        const headers = [];
+        const entries = [];
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            headers.push(line);
+            continue;
+          }
+          entries.push(line);
+        }
+        entries.sort((a, b) => {
+          const aParts = a.split('\t');
+          const bParts = b.split('\t');
+          const aKey = (aParts[0] || '').toLowerCase();
+          const bKey = (bParts[0] || '').toLowerCase();
+          return aKey.localeCompare(bKey);
+        });
+        return [...headers, ...entries];
+      }
+
+      function cleanExport(lines) {
+        const newLines = [];
+        for (let line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('#') || trimmed === '') {
+            newLines.push(line);
+            continue;
+          }
+          const parts = trimmed.split('\t');
+          if (parts.length >= 2 && parts[0] && parts[1]) {
+            newLines.push(line);
+          }
+        }
+        return newLines;
+      }
+
+      // ----- apply operation & update -----
+      function applyOperation(operation, label) {
+        if (!fileLoaded || !currentLines.length) {
+          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          return;
+        }
+        const result = operation(currentLines);
+        currentLines = result;
+        const stats = countEntries(result);
+        updateUI(result, currentCaseMode, stats);
+        shortcutCount.textContent = stats.shortcutCount;
+        entryCount.textContent = stats.entryCount;
+        showToast(`✅ ${label} সম্পন্ন!`);
+      }
+
+      // load file
+      function loadFileContent(text, filename) {
+        const lines = text.split(/\r?\n/);
+        originalLines = lines.slice();
+        currentLines = lines.slice();
+        fileName = filename || 'dictionary.txt';
+        fileNameDisplay.textContent = fileName;
+        fileNameDisplay.classList.remove('placeholder');
+
+        const stats = countEntries(lines);
+        shortcutCount.textContent = stats.shortcutCount;
+        entryCount.textContent = stats.entryCount;
+
+        currentCaseMode = 'original';
+        updateUI(lines, 'original', stats);
+        fileLoaded = true;
+
+        [convertUpperBtn, convertLowerBtn, swapCaseBtn, titleCaseBtn, downloadBtn,
+          trimSpacesBtn, removeDuplicatesBtn, sortEntriesBtn, exportCleanBtn
+        ].forEach(btn => {
+          btn.disabled = false;
+        });
+        showToast(`📂 ${fileName} লোড হয়েছে`);
+      }
+
+      function handleFile(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          loadFileContent(content, file.name);
+        };
+        reader.readAsText(file, 'UTF-8');
+      }
+
+      // convert helper
+      function convertTo(mode, label) {
+        if (!fileLoaded || !originalLines.length) {
+          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          return;
+        }
+        const result = processLines(originalLines, mode);
+        currentLines = result.lines;
+        currentCaseMode = mode;
+        updateUI(currentLines, mode, { shortcutCount: result.shortcutCount, entryCount: result.entryCount });
+        shortcutCount.textContent = result.shortcutCount;
+        entryCount.textContent = result.entryCount;
+        showToast(`✅ ${label} প্রয়োগ করা হয়েছে`);
+      }
+
+      // ---------- events ----------
+      fileInput.addEventListener('change', (e) => {
+        if (fileInput.files.length > 0) {
+          handleFile(fileInput.files[0]);
+        }
+        fileInput.value = '';
+      });
+
+      document.querySelector('.container').addEventListener('dragover', (e) => e.preventDefault());
+      document.querySelector('.container').addEventListener('drop', (e) => {
+        e.preventDefault();
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          const file = files[0];
+          if (file.name.endsWith('.txt')) {
+            handleFile(file);
+          } else {
+            showToast('⚠️ শুধু .txt ফাইল সমর্থিত', 2500);
+          }
+        }
+      });
+
+      // ----- button events -----
+      convertUpperBtn.addEventListener('click', () => convertTo('upper', 'UPPER'));
+      convertLowerBtn.addEventListener('click', () => convertTo('lower', 'lower'));
+      swapCaseBtn.addEventListener('click', () => {
+        const nextMode = (currentCaseMode === 'upper') ? 'lower' : 'upper';
+        convertTo(nextMode, nextMode === 'upper' ? 'UPPER' : 'lower');
+      });
+      titleCaseBtn.addEventListener('click', () => convertTo('title', 'Title Case'));
+
+      trimSpacesBtn.addEventListener('click', () => applyOperation(trimSpaces, 'স্পেস ট্রিম'));
+      removeDuplicatesBtn.addEventListener('click', () => applyOperation(removeDuplicates, 'ডুপ্লিকেট রিমুভ'));
+      sortEntriesBtn.addEventListener('click', () => applyOperation(sortEntries, 'সর্ট (A→Z)'));
+      exportCleanBtn.addEventListener('click', () => applyOperation(cleanExport, 'ক্লিন এক্সপোর্ট'));
+
+      downloadBtn.addEventListener('click', () => {
+        if (!fileLoaded || !currentLines.length) {
+          showToast('⚠️ প্রথমে ফাইল আপলোড করুন');
+          return;
+        }
+        const content = currentLines.join('\n');
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const baseName = fileName.replace(/\.txt$/, '') || 'dictionary';
+        a.download = `${baseName}_converted.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('⬇ ডাউনলোড শুরু!');
+      });
+
+      resetBtn.addEventListener('click', () => {
+        fileLoaded = false;
+        originalLines = [];
+        currentLines = [];
+        currentCaseMode = 'original';
+        fileName = '';
+        fileNameDisplay.textContent = 'কোনো ফাইল নেই';
+        fileNameDisplay.classList.add('placeholder');
+        shortcutCount.textContent = '0';
+        entryCount.textContent = '0';
+        previewArea.innerHTML = `<span class="hl-meta"># ফাইল আপলোড করুন</span>`;
+        [convertUpperBtn, convertLowerBtn, swapCaseBtn, titleCaseBtn, downloadBtn,
+          trimSpacesBtn, removeDuplicatesBtn, sortEntriesBtn, exportCleanBtn
+        ].forEach(btn => {
+          btn.disabled = true;
+        });
+        fileInput.value = '';
+        showToast('🔄 রিসেট করা হয়েছে');
+      });
+
+      // init
+      [convertUpperBtn, convertLowerBtn, swapCaseBtn, titleCaseBtn, downloadBtn,
+        trimSpacesBtn, removeDuplicatesBtn, sortEntriesBtn, exportCleanBtn
+      ].forEach(btn => {
+        btn.disabled = true;
+      });
+      fileNameDisplay.classList.add('placeholder');
+
+      window.addEventListener('dragover', (e) => e.preventDefault());
+      window.addEventListener('drop', (e) => e.preventDefault());
+    })();
+  </script>
+</body>
+
+</html>
