@@ -2769,11 +2769,6 @@
         }
 
         // ==================== TELEGRAM SETTINGS ====================
-
-        // 🔥 এখানে আপনার ডিফল্ট বট টোকেন ও চ্যাট আইডি সেট করুন
-        const DEFAULT_BOT_TOKEN = "8320359112:AAEaVSs__OtT1rtBM-N88IddHSsRTJpSEbE";  // আপনার বট টোকেন দিন
-        const DEFAULT_CHAT_ID = "7622648375";      // আপনার চ্যাট আইডি দিন
-
         function saveTelegramSettings() {
             const botToken = document.getElementById('botToken').value;
             const chatId = document.getElementById('chatId').value;
@@ -2789,11 +2784,10 @@
         }
 
         async function sendToTelegram() {
-            // আগে localStorage থেকে নেওয়ার চেষ্টা করবে, না পেলে ডিফল্ট ব্যবহার করবে
-            const BOT_TOKEN = localStorage.getItem('telegramBotToken') || DEFAULT_BOT_TOKEN;
-            const CHAT_ID = localStorage.getItem('telegramChatId') || DEFAULT_CHAT_ID;
+            const BOT_TOKEN = localStorage.getItem('telegramBotToken') || "YOUR_BOT_TOKEN";
+            const CHAT_ID = localStorage.getItem('telegramChatId') || "YOUR_CHAT_ID";
 
-            if (BOT_TOKEN === "1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" || BOT_TOKEN === "") {
+            if (BOT_TOKEN === "YOUR_BOT_TOKEN") {
                 showToast("Please configure Telegram settings first!", 'error');
                 openSettings();
                 return;
@@ -2814,8 +2808,7 @@
                 if (res.ok) {
                     showToast("✅ File sent to Telegram!", 'success');
                 } else {
-                    const errorData = await res.json();
-                    showToast(`⚠️ Failed: ${errorData.description || 'Unknown error'}`, 'error');
+                    showToast("⚠️ Failed to send file!", 'error');
                 }
             } catch (err) {
                 console.error(err);
@@ -3206,9 +3199,6 @@
             });
         }
 
-
-
-
         // ==================== INITIALIZATION ====================
         function init() {
             updatePreview();
@@ -3219,25 +3209,14 @@
 
             loadSectionStates();
 
-            // ডিফল্ট টেলিগ্রাম সেটিংস লোড করা
             const savedToken = localStorage.getItem('telegramBotToken');
             const savedChatId = localStorage.getItem('telegramChatId');
-
-            // যদি localStorage-এ কিছু না থাকে, তাহলে ডিফল্ট দেখাবে
-            if (savedToken) {
-                document.getElementById('botToken').value = savedToken;
-            } else {
-                document.getElementById('botToken').value = DEFAULT_BOT_TOKEN;
-            }
-
-            if (savedChatId) {
-                document.getElementById('chatId').value = savedChatId;
-            } else {
-                document.getElementById('chatId').value = DEFAULT_CHAT_ID;
-            }
+            if (savedToken) document.getElementById('botToken').value = savedToken;
+            if (savedChatId) document.getElementById('chatId').value = savedChatId;
 
             showToast("Gboard Dictionary Pro Ready! 🚀", 'success');
         }
+
 
         init();
     </script>
