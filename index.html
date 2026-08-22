@@ -429,6 +429,7 @@
             flex-direction: row;
             gap: 12px;
             justify-content: center;
+            /* ← এইটাই সেন্টার করবে */
             align-items: center;
             margin-top: 12px;
             flex-wrap: wrap;
@@ -450,7 +451,6 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            align-items: center;
             gap: 5px;
             margin: 12px 0;
             padding: 12px 8px;
@@ -462,76 +462,18 @@
         #alphabetBar span {
             font-size: 11px;
             font-weight: 700;
+            color: var(--primary);
             cursor: pointer;
             padding: 6px 10px;
             border-radius: 20px;
             min-width: 34px;
             text-align: center;
-            transition: all 0.2s ease;
-            user-select: none;
         }
 
-        #alphabetBar .letter {
-            color: var(--primary);
-        }
-
-        #alphabetBar .letter:active {
+        #alphabetBar span:active {
             background: var(--primary);
             color: white;
             transform: scale(0.95);
-        }
-
-        #alphabetBar .separator {
-            color: var(--text-muted);
-            font-weight: 300;
-            padding: 0 6px;
-            cursor: default;
-            min-width: auto;
-        }
-
-        #alphabetBar .sort-btn {
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: auto;
-            border: none;
-        }
-
-        #alphabetBar .sort-btn:active {
-            transform: scale(0.95);
-        }
-
-        #alphabetBar .sort-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        #alphabetBar .sort-shortcut {
-            background: var(--primary);
-        }
-
-        #alphabetBar .sort-value {
-            background: var(--success);
-        }
-
-        #alphabetBar .sort-reset {
-            background: var(--danger);
-            font-size: 14px;
-            padding: 5px 14px;
-        }
-
-        /* ডার্ক মোডে আলফাবেট বার */
-        [data-theme="dark"] #alphabetBar .sort-btn {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        [data-theme="dark"] #alphabetBar .sort-btn:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         /* ======================================== */
@@ -1569,6 +1511,9 @@
             }
         }
 
+
+
+
         /* ======================================== */
         /* REDMI NOTE 15 5G - স্পেসিফিক অপটিমাইজেশন */
         /* ======================================== */
@@ -1591,6 +1536,7 @@
                 border-radius: 20px;
             }
 
+            /* হেডার বড় করে */
             h1 {
                 font-size: 2.2rem;
                 margin-bottom: 8px;
@@ -1600,11 +1546,13 @@
                 font-size: 1rem;
             }
 
+            /* ফর্ম এলিমেন্ট বড় টাচ এরিয়ার জন্য */
             input,
             textarea,
             select,
             button {
                 font-size: 16px !important;
+                /* জুম এড়ানোর জন্য */
                 border-radius: 14px !important;
             }
 
@@ -1619,6 +1567,7 @@
                 padding: 14px 16px !important;
             }
 
+            /* বাটনগুলো টাচ ফ্রেন্ডলি */
             .btn {
                 padding: 12px 18px !important;
                 min-height: 48px !important;
@@ -1626,6 +1575,7 @@
                 font-size: 0.9rem !important;
             }
 
+            /* অ্যাকশন গ্রিড ২ কলাম */
             .actions-grid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
@@ -1638,6 +1588,7 @@
                 justify-content: center;
             }
 
+            /* নিউ এন্ট্রি কার্ড */
             #newEntryCard .input-group {
                 flex-direction: column;
                 gap: 12px;
@@ -1653,6 +1604,7 @@
                 height: 52px;
             }
 
+            /* এডিট কন্ট্রোলস ২ কলাম */
             .edit-controls {
                 display: grid !important;
                 grid-template-columns: 1fr 1fr;
@@ -1664,6 +1616,7 @@
                 padding: 12px !important;
             }
 
+            /* প্রিভিউ এলাকা */
             #preview {
                 height: 420px;
                 padding: 14px;
@@ -1685,6 +1638,7 @@
                 font-size: 14px;
             }
 
+            /* আলফাবেট বার - টাচ এর জন্য বড় */
             #alphabetBar {
                 gap: 8px;
                 padding: 12px 8px;
@@ -1699,6 +1653,7 @@
                 font-weight: 600;
             }
 
+            /* অ্যাডভান্সড ফিল্টার */
             .advanced-filters {
                 grid-template-columns: 1fr;
                 gap: 14px;
@@ -1715,12 +1670,14 @@
                 min-height: 48px;
             }
 
+            /* স্ট্যাটস বার */
             #stats {
                 font-size: 0.85rem;
                 padding: 12px;
                 margin-top: 12px;
             }
 
+            /* FAB - রাইট সাইডে */
             .fab-container {
                 bottom: 24px;
                 right: 20px;
@@ -1747,6 +1704,7 @@
                 padding: 0 16px;
             }
 
+            /* সেটিংস বাটন */
             .settings-btn {
                 top: 20px;
                 right: 20px;
@@ -1756,6 +1714,7 @@
                 border-radius: 50%;
             }
 
+            /* সেটিংস মডাল */
             .settings-content {
                 width: 92%;
                 max-width: 500px;
@@ -1768,6 +1727,7 @@
                 margin-bottom: 18px;
             }
 
+            /* টোস্ট মেসেজ */
             #toast {
                 bottom: 100px;
                 padding: 14px 24px;
@@ -1829,6 +1789,7 @@
         /* টাচ অপটিমাইজেশন (Redmi Note 15 5G)      */
         /* ======================================== */
 
+        /* টাচ ফিডব্যাক উন্নত করা */
         @media (hover: none) and (pointer: coarse) {
 
             .btn,
@@ -1862,6 +1823,7 @@
             }
         }
 
+        /* নোটচ 15 5G নচ/পাঞ্চ হোল এর জন্য সেফ এরিয়া */
         @supports (padding-top: env(safe-area-inset-top)) {
             body {
                 padding-top: env(safe-area-inset-top);
@@ -1881,6 +1843,7 @@
             }
         }
 
+        /* হাই রিফ্রেশ রেট ডিসপ্লের জন্য অ্যানিমেশন অপটিমাইজ */
         @media (prefers-reduced-motion: no-preference) {
             * {
                 scroll-behavior: smooth;
@@ -1978,6 +1941,7 @@
                 <div class="card" id="advancedFiltersCard">
                     <h3>🔍 Advanced Filters</h3>
 
+                    <!-- 🔽 টগল 1: অ্যাডভান্সড অপশনস -->
                     <div
                         style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding: 10px; background: var(--bg); border-radius: 8px;">
                         <label style="font-weight: 600; font-size: 0.85rem;">🎛️ Advanced Options</label>
@@ -1987,6 +1951,7 @@
                         </label>
                     </div>
 
+                    <!-- 🔽 টগল 2: এক্সাক্ট ম্যাচ টগল (NEW) -->
                     <div
                         style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding: 10px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--primary);">
                         <div>
@@ -2133,6 +2098,7 @@
             <button class="fab-action" onclick="toggleSection('newEntryCard')" title="New Entry">➕</button>
             <button class="fab-action" onclick="toggleSection('advancedFiltersCard')"
                 title="Advanced Filters">🔍</button>
+            <!-- 🔽 দুটি নতুন বাটন যোগ করুন -->
             <button class="fab-action" onclick="toggleSection('previewCard')" title="Live Preview">👁️</button>
             <button class="fab-action" onclick="quickExport()" title="Quick Export">📤</button>
             <button class="fab-action" onclick="resetAllSections()" title="Reset All">🔄</button>
@@ -2180,6 +2146,7 @@
             localStorage.setItem('theme', theme);
         }
 
+        // Load saved theme
         const savedTheme = localStorage.getItem('theme') || 'auto';
         changeTheme(savedTheme);
         if (document.getElementById('themeSelect')) {
@@ -2199,6 +2166,7 @@
             document.body.style.overflow = '';
         }
 
+        // Close modal when clicking outside
         document.getElementById('settingsModal').addEventListener('click', function (e) {
             if (e.target === this) {
                 closeSettings();
@@ -2212,29 +2180,39 @@
             fabActions.classList.toggle('show', isFabOpen);
         }
 
+
         function quickExport() {
             downloadZip();
         }
 
+
+        // সেকশন টগল করার ফাংশন
         function toggleSection(sectionId) {
             const section = document.getElementById(sectionId);
             if (!section) return;
 
+            // ক্লাস টগল করি
             if (section.classList.contains('section-hidden')) {
                 section.classList.remove('section-hidden');
                 showToast(`${getSectionName(sectionId)} shown`, 'success');
+
+                // localStorage-এ state সেভ করি
                 saveSectionState(sectionId, false);
             } else {
                 section.classList.add('section-hidden');
                 showToast(`${getSectionName(sectionId)} hidden`, 'info');
+
+                // localStorage-এ state সেভ করি
                 saveSectionState(sectionId, true);
             }
 
+            // লেআউট আপডেট করি
             setTimeout(() => {
                 if (typeof updatePreview === 'function') updatePreview();
             }, 100);
         }
 
+        // সেকশনের নাম দেখানোর জন্য (আপডেটেড)
         function getSectionName(sectionId) {
             const names = {
                 'fileManagementCard': '📁 File Management',
@@ -2242,20 +2220,23 @@
                 'newEntryCard': '➕ New Entry',
                 'advancedFiltersCard': '🔍 Advanced Filters',
                 'quickActionsCard': '⚡ Quick Actions',
-                'previewCard': '👁️ Live Preview',
-                'headerSection': '🚀 Header'
+                'previewCard': '👁️ Live Preview',     // নতুন যোগ করুন
+                'headerSection': '🚀 Header'           // নতুন যোগ করুন
             };
             return names[sectionId] || sectionId;
         }
 
+        // localStorage-এ সেকশনের state সেভ করা
         function saveSectionState(sectionId, isHidden) {
             let hiddenSections = JSON.parse(localStorage.getItem('hiddenSections') || '{}');
             hiddenSections[sectionId] = isHidden;
             localStorage.setItem('hiddenSections', JSON.stringify(hiddenSections));
         }
 
+        // লোড করার সময় আগের state রিস্টোর করা
         function loadSectionStates() {
             const hiddenSections = JSON.parse(localStorage.getItem('hiddenSections') || '{}');
+
             Object.keys(hiddenSections).forEach(sectionId => {
                 const section = document.getElementById(sectionId);
                 if (section && hiddenSections[sectionId]) {
@@ -2264,6 +2245,7 @@
             });
         }
 
+        // সব সেকশন রিসেট করার ফাংশন (আপডেটেড)
         function resetAllSections() {
             const sections = [
                 'fileManagementCard',
@@ -2271,8 +2253,8 @@
                 'newEntryCard',
                 'advancedFiltersCard',
                 'quickActionsCard',
-                'previewCard',
-                'headerSection'
+                'previewCard',      // নতুন যোগ করুন
+                'headerSection'     // নতুন যোগ করুন
             ];
             sections.forEach(sectionId => {
                 const section = document.getElementById(sectionId);
@@ -2283,6 +2265,7 @@
             });
             showToast('All sections restored', 'success');
         }
+
 
         // ==================== UTILITY FUNCTIONS ====================
         function showToast(msg, type = 'info') {
@@ -2333,16 +2316,22 @@
 
         function initExactMatchToggle() {
             const exactMatchToggle = document.getElementById('exactMatchToggle');
+
+            // লোড করা অবস্থা রিস্টোর করা
             const savedExactMatch = localStorage.getItem('exactMatchEnabled');
             if (savedExactMatch !== null) {
                 exactMatchEnabled = savedExactMatch === 'true';
                 exactMatchToggle.checked = exactMatchEnabled;
             }
 
+            // টগল চেঞ্জ ইভেন্ট
             exactMatchToggle.addEventListener('change', function () {
                 exactMatchEnabled = this.checked;
                 localStorage.setItem('exactMatchEnabled', exactMatchEnabled);
+
+                // ফিল্টার রিসেট না করে আপডেট করা
                 updatePreview();
+
                 showToast(exactMatchEnabled ?
                     '🔍 Exact Match Mode: ON - Only exact shortcuts/values will match' :
                     '🔍 Exact Match Mode: OFF - Partial matches allowed',
@@ -2358,42 +2347,51 @@
             const exactMatchToggle = document.getElementById('exactMatchToggle');
 
             function autoFillValueFromExactMatch() {
+                // শুধু তখনই কাজ করবে যখন Exact Match Mode ON থাকবে
                 if (!exactMatchToggle.checked) return;
 
                 const searchShortcut = shortcutFilterInput.value.trim().toLowerCase();
 
                 if (searchShortcut === '') {
+                    // যদি শর্টকাট ফিল্টার খালি হয়, তাহলে ভ্যালু ফিল্টারও খালি করবে
                     if (valueFilterInput.value !== '') {
                         valueFilterInput.value = '';
-                        updatePreview();
+                        updatePreview(); // প্রিভিউ আপডেট করবে
                     }
                     return;
                 }
 
+                // ডিকশনারির সব লাইন থেকে exact match খোঁজা
                 const lines = textArea.value.split('\n').filter(line => line.trim());
                 let exactMatchValue = '';
 
                 for (const line of lines) {
                     const parts = line.split('\t');
                     const shortcut = parts[0]?.toLowerCase() || '';
+
                     if (shortcut === searchShortcut) {
                         exactMatchValue = parts[1] || '';
                         break;
                     }
                 }
 
+                // ভ্যালু ফিল্ড আপডেট করা
                 if (valueFilterInput.value !== exactMatchValue) {
                     valueFilterInput.value = exactMatchValue;
-                    updatePreview();
+                    updatePreview(); // ভ্যালু ফিল্টার চেঞ্জ হলে প্রিভিউ আপডেট
                 }
             }
 
+            // ইভেন্ট লিসেনার
             shortcutFilterInput.addEventListener('input', autoFillValueFromExactMatch);
 
+            // Exact Match টগল চেঞ্জ হলে ভ্যালু ফিল্ড রিসেট করা
             exactMatchToggle.addEventListener('change', function () {
                 if (!this.checked) {
+                    // Exact Match OFF হলে ভ্যালু ফিল্টার ক্লিয়ার করবে
                     valueFilterInput.value = '';
                 } else {
+                    // Exact Match ON হলে বর্তমান শর্টকাটের ভ্যালু সেট করবে
                     autoFillValueFromExactMatch();
                 }
                 updatePreview();
@@ -2413,6 +2411,8 @@
             const vFilter = valueFilter.value.toLowerCase();
             const filterType = document.getElementById('filterType').value;
             const sortBy = document.getElementById('sortBy').value;
+
+            // Check if advanced options are enabled
             const advancedOptionsEnabled = document.getElementById('advancedOptionsToggle')?.checked || true;
 
             filteredLines = lines.filter(line => {
@@ -2420,12 +2420,13 @@
                 const sc = parts[0]?.toLowerCase() || '';
                 const val = parts[1]?.toLowerCase() || '';
 
-                let scMatch = false,
-                    valMatch = false;
+                let scMatch = false, valMatch = false;
 
+                // EXACT MATCH LOGIC (NEW)
                 if (exactMatchEnabled) {
+                    // Exact match mode: Full string comparison
                     if (sFilter === '') {
-                        scMatch = true;
+                        scMatch = true;  // No filter means all pass
                     } else {
                         scMatch = (sc === sFilter);
                     }
@@ -2436,6 +2437,7 @@
                         valMatch = (val === vFilter);
                     }
                 } else {
+                    // Normal mode with filter type
                     if (advancedOptionsEnabled) {
                         switch (filterType) {
                             case 'startsWith':
@@ -2446,31 +2448,37 @@
                                 scMatch = sc.endsWith(sFilter);
                                 valMatch = val.endsWith(vFilter);
                                 break;
-                            default:
+                            default: // contains
                                 scMatch = sc.includes(sFilter);
                                 valMatch = val.includes(vFilter);
                         }
                     } else {
+                        // Advanced options disabled - simple contains only
                         scMatch = sc.includes(sFilter);
                         valMatch = val.includes(vFilter);
                     }
                 }
 
+                // If both filters are empty, show all
                 if (sFilter === '' && vFilter === '') {
                     return true;
                 }
 
+                // If only shortcut filter has value
                 if (sFilter !== '' && vFilter === '') {
                     return scMatch;
                 }
 
+                // If only value filter has value
                 if (vFilter !== '' && sFilter === '') {
                     return valMatch;
                 }
 
+                // Both filters have values
                 return scMatch && valMatch;
             });
 
+            // Sorting logic (unmodified)
             if (advancedOptionsEnabled) {
                 filteredLines.sort((a, b) => {
                     const aParts = a.split('\t');
@@ -2486,6 +2494,7 @@
                     }
                 });
             } else {
+                // Default sorting by shortcut A-Z when advanced options disabled
                 filteredLines.sort((a, b) => {
                     return (a.split('\t')[0] || '').localeCompare(b.split('\t')[0] || '');
                 });
@@ -2501,38 +2510,35 @@
 
             preview.innerHTML = filteredLines.map((line, i) => {
                 const parts = line.split('\t');
-                const sc = parts[0] || '',
-                    val = parts[1] || '';
-                const isDup = counts[sc] > 1,
-                    isSelected = i === selectedIndex;
+                const sc = parts[0] || '', val = parts[1] || '';
+                const isDup = counts[sc] > 1, isSelected = i === selectedIndex;
 
                 const prev = prevClasses.find(p => p.sc === sc);
                 let cls = isSelected ? 'selected' : '';
                 if (isDup) cls += ' highlight';
                 if (prev) cls += ' ' + prev.cls.replace('selected', '').replace('highlight', '').trim();
 
+                // Add exact match indicator
+                let exactMatchIndicator = '';
                 if (exactMatchEnabled && sFilter !== '' && sc.toLowerCase() === sFilter) {
                     cls += ' exact-match';
                 }
 
                 return `<div class="${cls}" data-index="${i}">
-                        <span class="shortcut">${escapeHtml(sc)}</span>
-                        <span class="value">${escapeHtml(val)}</span>
-                    </div>`;
+            <span class="shortcut">${escapeHtml(sc)}${exactMatchIndicator}</span>
+            <span class="value">${escapeHtml(val)}</span>
+        </div>`;
             }).join('');
 
             let dup = 0;
-            for (let k in counts)
-                if (counts[k] > 1) dup += counts[k] - 1;
+            for (let k in counts) if (counts[k] > 1) dup += counts[k] - 1;
 
             const exactMatchText = exactMatchEnabled ? ' | Exact Match Mode: ON' : '';
             const lineNumberText = selectedIndex >= 0 ? `Line: ${selectedIndex + 1} | ` : '';
-            stats.textContent =
-                `${lineNumberText}Total: ${lines.length} | Duplicates: ${dup} | Filtered: ${filteredLines.length}${exactMatchText}`;
+            stats.textContent = `${lineNumberText}Total: ${lines.length} | Duplicates: ${dup} | Filtered: ${filteredLines.length}${exactMatchText}`;
 
             updateEditableFields();
-            updateProgress((filteredLines.length / Math.max(lines.length, 1)) * 100,
-                `${filteredLines.length} entries displayed`);
+            updateProgress((filteredLines.length / Math.max(lines.length, 1)) * 100, `${filteredLines.length} entries displayed`);
 
             if (scrollToSelected && selectedIndex >= 0) {
                 const child = preview.children[selectedIndex];
@@ -2645,6 +2651,7 @@
                 return;
             }
 
+            // Dictionary object তৈরি করা
             const dictionaryObj = {};
 
             lines.forEach(line => {
@@ -2652,6 +2659,8 @@
                 if (parts.length >= 2) {
                     let shortcut = parts[0].trim();
                     let value = parts[1].trim();
+
+                    // 🔥 value-তে থাকা \44 কে " এ কনভার্ট করা
                     value = value.replace(/\\44/g, '"');
 
                     if (shortcut && value) {
@@ -2665,22 +2674,29 @@
                 return;
             }
 
+            // এন্ট্রিগুলো শর্টকাট অনুযায়ী সাজানো (A-Z)
             const sortedEntries = Object.keys(dictionaryObj).sort().map(key => [key, dictionaryObj[key]]);
 
+            // Perfect ইন্ডেন্টেশন সহ ফাইনাল টেক্সট কন্টেন্ট তৈরি (শুধু অবজেক্ট)
             let pcTextContent = `const defaultDictionary = {\n`;
 
+            // প্রতিটি এন্ট্রি Perfect ইন্ডেন্টেশন সহ ফরম্যাট করা
             sortedEntries.forEach(([key, value], index) => {
                 const isLast = index === sortedEntries.length - 1;
+                // 4 স্পেস ইন্ডেন্টেশন ব্যবহার করা হয়েছে - Copy-Paste Ready
+                // 🔥 value-তে থাকা ডাবল কোট এসকেপ করা হচ্ছে
                 pcTextContent += `    "${key}": "${value.replace(/"/g, '\\"')}"${isLast ? '' : ','}\n`;
             });
 
             pcTextContent += `};`;
 
+            // TXT ফাইল হিসেবে ডাউনলোড করা
             const blob = new Blob([pcTextContent], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
 
+            // টাইমস্ট্যাম্প সহ ফাইলের নাম তৈরি - pc_ prefix এবং .txt এক্সটেনশন
             const now = new Date();
             let hours = now.getHours();
             const minutes = now.getMinutes();
@@ -2692,6 +2708,7 @@
             const month = now.toLocaleString('default', { month: 'long' });
             const year = now.getFullYear();
 
+            // ফাইলের নাম তৈরি
             const filename = `pc_dictionary_${formattedHours}_${formattedMinutes}_${ampm}_${day}_${month}_${year}.txt`;
 
             a.download = filename;
@@ -2768,6 +2785,14 @@
             }
         }
 
+        // ==================== HOME PAGE NAVIGATION ====================
+        function goToHomePage() {
+            // Root folder-এর main page-এ নিয়ে যাবে
+            window.location.href = './index.html';  // অথবা 'index.html'
+            // অথবা
+            // window.location.href = '/';
+        }
+
         // ==================== TELEGRAM SETTINGS ====================
         function saveTelegramSettings() {
             const botToken = document.getElementById('botToken').value;
@@ -2821,130 +2846,14 @@
             const alphabetBar = document.getElementById("alphabetBar");
             alphabetBar.innerHTML = '';
 
-            // Letters A-Z
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(letter => {
                 const span = document.createElement("span");
                 span.textContent = letter;
-                span.className = 'letter';
                 span.addEventListener("click", () => jumpToLetter(letter.toLowerCase()));
                 alphabetBar.appendChild(span);
             });
-
-            // Separator
-            const sep = document.createElement("span");
-            sep.textContent = "|";
-            sep.className = 'separator';
-            alphabetBar.appendChild(sep);
-
-            // Smart Dictionary Sort
-            const sortSc = document.createElement("span");
-            sortSc.textContent = "📖 Smart";
-            sortSc.className = 'sort-btn sort-shortcut';
-            sortSc.title = "Smart Dictionary Sort (l, ll, lll, lk, lkk, lkaj...)";
-            sortSc.addEventListener("click", () => {
-                smartDictionarySort();
-            });
-            alphabetBar.appendChild(sortSc);
-
-            // Sort by Value (A-Z)
-            const sortVal = document.createElement("span");
-            sortVal.textContent = "📝 Value";
-            sortVal.className = 'sort-btn sort-value';
-            sortVal.title = "Sort by Value (A-Z)";
-            sortVal.addEventListener("click", () => {
-                sortByValue();
-            });
-            alphabetBar.appendChild(sortVal);
-
-            // Reset Button
-            const reset = document.createElement("span");
-            reset.textContent = "↺";
-            reset.className = 'sort-btn sort-reset';
-            reset.title = "Reset to Default Sort";
-            reset.addEventListener("click", () => {
-                resetSort();
-            });
-            alphabetBar.appendChild(reset);
         }
 
-        // ==================== SMART DICTIONARY SORT ====================
-
-        // স্মার্ট ডিকশনারি সর্ট: l, ll, lll, lk, lkk, lkaj, lkajj...
-        function smartDictionarySort() {
-            const lines = textArea.value.split('\n').filter(line => line.trim());
-
-            const comments = lines.filter(l => l.trim().startsWith('#'));
-            const normal = lines.filter(l => !l.trim().startsWith('#'));
-
-            normal.sort((a, b) => {
-                const aShortcut = (a.split('\t')[0] || '').toLowerCase();
-                const bShortcut = (b.split('\t')[0] || '').toLowerCase();
-
-                // প্রথমে অক্ষর অনুযায়ী তুলনা (লেক্সিকোগ্রাফিক্যাল)
-                // কিন্তু 'l' এরপর 'll' আসবে, 'lk' এর আগে
-                // কারণ 'l' < 'll' < 'lk' (ডিকশনারি অর্ডার)
-
-                // এখানে বিশেষ নিয়ম: 
-                // 1. প্রথম অক্ষর ভিন্ন হলে সেটা অনুযায়ী সাজানো
-                if (aShortcut[0] !== bShortcut[0]) {
-                    return aShortcut[0].localeCompare(bShortcut[0]);
-                }
-
-                // 2. একই অক্ষর দিয়ে শুরু হলে, লেক্সিকোগ্রাফিক্যালি সাজানো
-                // কিন্তু 'l' (দৈর্ঘ্য 1) এরপর 'll' (দৈর্ঘ্য 2) আসবে
-                // 'll' (দৈর্ঘ্য 2) এরপর 'llk' (দৈর্ঘ্য 3) আসবে
-                // 'llk' এরপর 'lll' আসবে (কারণ 'k' < 'l')
-                // তারপর 'lk' আসবে (কারণ 'll' < 'lk')
-
-                // সোজা ভাষায়: ডিকশনারি যেভাবে সাজায় সেভাবে
-                return aShortcut.localeCompare(bShortcut);
-            });
-
-            textArea.value = [...comments, ...normal].join('\n');
-            selectedIndex = -1;
-            updatePreview();
-            showToast("📖 Smart Dictionary Sort Complete!", 'success');
-        }
-
-        // ভ্যালু অনুযায়ী সাজানো (A-Z)
-        function sortByValue() {
-            const lines = textArea.value.split('\n').filter(line => line.trim());
-
-            const comments = lines.filter(l => l.trim().startsWith('#'));
-            const normal = lines.filter(l => !l.trim().startsWith('#'));
-
-            normal.sort((a, b) => {
-                const aValue = (a.split('\t')[1] || '').toLowerCase();
-                const bValue = (b.split('\t')[1] || '').toLowerCase();
-                return aValue.localeCompare(bValue);
-            });
-
-            textArea.value = [...comments, ...normal].join('\n');
-            selectedIndex = -1;
-            updatePreview();
-            showToast("✅ Sorted by Value (A-Z)", 'success');
-        }
-
-        // ডিফল্ট সর্টে ফিরে যাওয়া
-        function resetSort() {
-            const lines = textArea.value.split('\n').filter(line => line.trim());
-
-            const comments = lines.filter(l => l.trim().startsWith('#'));
-            const normal = lines.filter(l => !l.trim().startsWith('#'));
-
-            normal.sort((a, b) => {
-                const aShortcut = (a.split('\t')[0] || '').toLowerCase();
-                const bShortcut = (b.split('\t')[0] || '').toLowerCase();
-                return aShortcut.localeCompare(bShortcut);
-            });
-
-            textArea.value = [...comments, ...normal].join('\n');
-            selectedIndex = -1;
-            updatePreview();
-            showToast("↺ Reset to default sort", 'info');
-        }
-
-        // Jump to Letter
         function jumpToLetter(letter) {
             for (let i = 0; i < preview.children.length; i++) {
                 const sc = preview.children[i].querySelector(".shortcut")?.textContent.toLowerCase();
@@ -3013,30 +2922,12 @@
 
             if (e.ctrlKey || e.metaKey) {
                 switch (e.key.toLowerCase()) {
-                    case 's':
-                        e.preventDefault();
-                        downloadFile();
-                        break;
-                    case 'd':
-                        e.preventDefault();
-                        removeDuplicates();
-                        break;
-                    case 'e':
-                        e.preventDefault();
-                        removeEmptyLines();
-                        break;
-                    case 'k':
-                        e.preventDefault();
-                        removeExtraSpaces();
-                        break;
-                    case 'l':
-                        e.preventDefault();
-                        sortLines();
-                        break;
-                    case 'o':
-                        e.preventDefault();
-                        fileInput.click();
-                        break;
+                    case 's': e.preventDefault(); downloadFile(); break;
+                    case 'd': e.preventDefault(); removeDuplicates(); break;
+                    case 'e': e.preventDefault(); removeEmptyLines(); break;
+                    case 'k': e.preventDefault(); removeExtraSpaces(); break;
+                    case 'l': e.preventDefault(); sortLines(); break;
+                    case 'o': e.preventDefault(); fileInput.click(); break;
                 }
             }
 
@@ -3115,6 +3006,7 @@
             const a = document.createElement('a');
             a.href = url;
 
+            // টাইমস্ট্যাম্প জেনারেট করা
             const now = new Date();
             let hours = now.getHours();
             const minutes = now.getMinutes();
@@ -3126,6 +3018,7 @@
             const day = now.getDate();
             const month = now.toLocaleString('default', { month: 'long' });
 
+            // ফাইলের নাম: dictionary_09_85_PM_04_April.txt
             const filename = `dictionary_${formattedHours}_${formattedMinutes}_${ampm}_${day}_${month}.txt`;
 
             a.download = filename;
@@ -3138,6 +3031,7 @@
             const zip = new JSZip();
             zip.file("dictionary.txt", textArea.value);
 
+            // টাইমস্ট্যাম্প জেনারেট করা (একই ফরম্যাট)
             const now = new Date();
             const hours = now.getHours();
             const minutes = now.getMinutes();
@@ -3150,8 +3044,8 @@
             const month = now.toLocaleString('default', { month: 'long' });
             const year = now.getFullYear();
 
-            const zipFilename =
-                `gboard_dictionary_${formattedHours}_${formattedMinutes}_${ampm}_${day}_${month}_${year}.zip`;
+            // জিপ ফাইলের নাম তৈরি: gboard_dictionary_02_45_PM_04_April_2026.zip
+            const zipFilename = `gboard_dictionary_${formattedHours}_${formattedMinutes}_${ampm}_${day}_${month}_${year}.zip`;
 
             zip.generateAsync({ type: "blob" }).then(content => {
                 const a = document.createElement('a');
@@ -3168,11 +3062,13 @@
             const filterTypeGroup = document.getElementById('filterTypeGroup');
             const sortByGroup = document.getElementById('sortByGroup');
 
+            // লোড করা অবস্থা রিস্টোর করা
             const savedState = localStorage.getItem('advancedOptionsEnabled');
             if (savedState !== null) {
                 toggle.checked = savedState === 'true';
             }
 
+            // টগল স্টেট অনুযায়ী গ্রুপ দেখানো/লুকানো
             function updateGroupsVisibility() {
                 if (toggle.checked) {
                     filterTypeGroup.style.display = 'flex';
@@ -3185,11 +3081,16 @@
 
             updateGroupsVisibility();
 
+            // টগল চেঞ্জ ইভেন্ট
             toggle.addEventListener('change', function () {
                 updateGroupsVisibility();
                 localStorage.setItem('advancedOptionsEnabled', this.checked);
 
+                // টগল অফ থাকলে Filter Type ও Sort By রিসেট করে ডিফল্ট প্রিভিউ দেখানো
                 if (!this.checked) {
+                    // ফিল্টার টাইপ রিসেট না করে শুধু ইনঅ্যাকটিভ করে রাখা হচ্ছে
+                    // কিন্তু updatePreview() কল করা লাগবে না কারণ গ্রুপ hidden থাকলেও 
+                    // আগের সিলেক্টেড ভ্যালু কাজ করবে না - বরং এখানে রিসেট করা ভালো
                     document.getElementById('filterType').value = 'contains';
                     document.getElementById('sortBy').value = 'shortcut';
                 }
@@ -3199,6 +3100,7 @@
             });
         }
 
+
         // ==================== INITIALIZATION ====================
         function init() {
             updatePreview();
@@ -3207,8 +3109,10 @@
             initExactMatchToggle();
             setupAutoValueFill();
 
+            // সেকশনের স্টেট লোড করো
             loadSectionStates();
 
+            // Load Telegram settings if exists
             const savedToken = localStorage.getItem('telegramBotToken');
             const savedChatId = localStorage.getItem('telegramChatId');
             if (savedToken) document.getElementById('botToken').value = savedToken;
@@ -3217,7 +3121,7 @@
             showToast("Gboard Dictionary Pro Ready! 🚀", 'success');
         }
 
-
+        // ✅ এই লাইনটি যোগ করুন - এটাই ইন্সট্রাকশন যা সব ফাংশন রান করাবে
         init();
     </script>
 </body>
